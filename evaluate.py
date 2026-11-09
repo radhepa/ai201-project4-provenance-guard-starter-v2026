@@ -149,7 +149,7 @@ def run_trial(trial, url, timeout):
             error = None
         bad_rows.append({"request": name, "status": response.status_code, "error": error})
     after, _ = decision_count(url)
-    bad_ok = sum(400 <= r["status"] < 500 and r["error"] for r in bad_rows)
+    bad_ok = sum(400 <= r["status"] < 500 and bool(r["error"]) for r in bad_rows)
 
     return {
         "trial": trial,

@@ -102,6 +102,11 @@ position.**
 | `python detector.py` | Downloads the model and scores a sample — **run before class** |
 | `python detector.py "some text"` | Score one piece of text from the terminal |
 | `python stylometry.py "some text"` | Your style measures, on one piece of text |
+| `python scoring.py` | The score range each label covers, from `config.py` |
+| `python -m pytest tests` | The test suite (real-detector tests skip if gpt2 isn't downloaded) |
+| `python evaluate.py` | The five criteria in `criteria.md`, three trials, against the running service |
+| `python eval_data/build_human_set.py` | Rebuild the known-human passages from Project Gutenberg |
+| `python eval_data/calibrate.py` | Style and model scores on the calibration split only |
 | `python run_attacks.py --set <folder>` | The attack set — **unit 8** |
 | `python run_attacks.py --flood 15` | Push past your rate limit and print the status codes — **unit 8** |
 | `python run_eval.py --label before` | Your five criteria, three trials — **unit 8** |

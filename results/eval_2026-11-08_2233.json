@@ -1,0 +1,1562 @@
+[
+  {
+    "trial": 1,
+    "c1": {
+      "false_positives": [],
+      "count": 0,
+      "pass": true
+    },
+    "c2": {
+      "mean_ai": 0.8882,
+      "mean_human": 0.4724,
+      "gap": 0.4158,
+      "pass": true
+    },
+    "c3": {
+      "labels_seen": [
+        "ai",
+        "human",
+        "unsure"
+      ],
+      "sweep_pass": true,
+      "sweep_changes": [
+        0.35,
+        0.7501
+      ],
+      "pass": true
+    },
+    "c4": {
+      "appeals_ok": 5,
+      "unknown_ok": 3,
+      "appeals": [
+        {
+          "content_id": "e125ba9004294192be6a5b23abfa1a30",
+          "reason": "evaluate.py trial 1: I wrote human_2397_35 myself.",
+          "status": 200,
+          "returned_status": "under_review",
+          "appeal_entries": 1,
+          "reason_logged": true
+        },
+        {
+          "content_id": "3e358b0886bb4f5a81b62a0d9f35a9cf",
+          "reason": "evaluate.py trial 1: I wrote human_2397_65 myself.",
+          "status": 200,
+          "returned_status": "under_review",
+          "appeal_entries": 1,
+          "reason_logged": true
+        },
+        {
+          "content_id": "065e79f0a4a34eada3482d4934fbb556",
+          "reason": "evaluate.py trial 1: I wrote human_2376_35 myself.",
+          "status": 200,
+          "returned_status": "under_review",
+          "appeal_entries": 1,
+          "reason_logged": true
+        },
+        {
+          "content_id": "8c1896c21fb04154921bb09ac0a6bd88",
+          "reason": "evaluate.py trial 1: I wrote human_2376_65 myself.",
+          "status": 200,
+          "returned_status": "under_review",
+          "appeal_entries": 1,
+          "reason_logged": true
+        },
+        {
+          "content_id": "9edf147f0caf46dc969e09e3ddc887ca",
+          "reason": "evaluate.py trial 1: I wrote human_14668_35 myself.",
+          "status": 200,
+          "returned_status": "under_review",
+          "appeal_entries": 1,
+          "reason_logged": true
+        }
+      ],
+      "unknown": [
+        {
+          "content_id": "d0b4009b37f340ba90f865c57d6b438d",
+          "status": 404,
+          "appeal_entries": 0
+        },
+        {
+          "content_id": "e0807809172d42e3a22a21c1951f9a4b",
+          "status": 404,
+          "appeal_entries": 0
+        },
+        {
+          "content_id": "87bf290c35fe4975aaecbb287b541130",
+          "status": 404,
+          "appeal_entries": 0
+        }
+      ],
+      "pass": true
+    },
+    "c5": {
+      "refused_cleanly": 12,
+      "new_decisions": 0,
+      "requests": [
+        {
+          "request": "non-JSON body",
+          "status": 400,
+          "error": "invalid_json"
+        },
+        {
+          "request": "wrong content type",
+          "status": 415,
+          "error": "unsupported_media_type"
+        },
+        {
+          "request": "JSON list, not object",
+          "status": 400,
+          "error": "invalid_body"
+        },
+        {
+          "request": "missing text",
+          "status": 400,
+          "error": "missing_field"
+        },
+        {
+          "request": "empty text",
+          "status": 400,
+          "error": "empty_field"
+        },
+        {
+          "request": "whitespace-only text",
+          "status": 400,
+          "error": "empty_field"
+        },
+        {
+          "request": "non-string text",
+          "status": 400,
+          "error": "invalid_type"
+        },
+        {
+          "request": "missing creator_id",
+          "status": 400,
+          "error": "missing_field"
+        },
+        {
+          "request": "empty creator_id",
+          "status": 400,
+          "error": "empty_field"
+        },
+        {
+          "request": "non-string creator_id",
+          "status": 400,
+          "error": "invalid_type"
+        },
+        {
+          "request": "text over size limit",
+          "status": 413,
+          "error": "field_too_long"
+        },
+        {
+          "request": "text too short to score",
+          "status": 422,
+          "error": "text_too_short"
+        }
+      ],
+      "pass": true
+    },
+    "submissions": [
+      {
+        "id": "human_2397_35",
+        "truth": "human",
+        "plain": false,
+        "status": 200,
+        "content_id": "f72d173723b34aa299880a7cc6bcb014",
+        "guess": "unsure",
+        "confidence": 0.5176,
+        "model_score": 0.5052,
+        "style_score": 0.5363,
+        "label": "We can't tell whether a person or an AI tool wrote this. A lot of writing that people do entirely on their own lands here, so please don't read this as an accusation."
+      },
+      {
+        "id": "human_2397_65",
+        "truth": "human",
+        "plain": false,
+        "status": 200,
+        "content_id": "2f927203127644f4b91c5060b5abcebb",
+        "guess": "unsure",
+        "confidence": 0.5429,
+        "model_score": 0.5173,
+        "style_score": 0.5812,
+        "label": "We can't tell whether a person or an AI tool wrote this. A lot of writing that people do entirely on their own lands here, so please don't read this as an accusation."
+      },
+      {
+        "id": "human_2376_35",
+        "truth": "human",
+        "plain": true,
+        "status": 200,
+        "content_id": "eb29b0ed2afc4e6999de2e4fdc55b8ca",
+        "guess": "unsure",
+        "confidence": 0.5302,
+        "model_score": 0.7988,
+        "style_score": 0.1878,
+        "label": "We can't tell whether a person or an AI tool wrote this. A lot of writing that people do entirely on their own lands here, so please don't read this as an accusation."
+      },
+      {
+        "id": "human_2376_65",
+        "truth": "human",
+        "plain": true,
+        "status": 200,
+        "content_id": "c9b0156ea62d4a459368529cc2c5cb00",
+        "guess": "unsure",
+        "confidence": 0.705,
+        "model_score": 0.773,
+        "style_score": 0.603,
+        "label": "We can't tell whether a person or an AI tool wrote this. A lot of writing that people do entirely on their own lands here, so please don't read this as an accusation."
+      },
+      {
+        "id": "human_14668_35",
+        "truth": "human",
+        "plain": true,
+        "status": 200,
+        "content_id": "dde05929283e431aac1ee222fa3fc0dd",
+        "guess": "unsure",
+        "confidence": 0.5114,
+        "model_score": 0.6406,
+        "style_score": 0.3186,
+        "label": "We can't tell whether a person or an AI tool wrote this. A lot of writing that people do entirely on their own lands here, so please don't read this as an accusation."
+      },
+      {
+        "id": "human_14668_65",
+        "truth": "human",
+        "plain": true,
+        "status": 200,
+        "content_id": "721ed961d531403c912b7e5667e374e1",
+        "guess": "human",
+        "confidence": 0.1988,
+        "model_score": 0.1512,
+        "style_score": 0.2703,
+        "label": "We think a person most likely wrote this. Our checks found the patterns we usually see in human writing."
+      },
+      {
+        "id": "human_55_35",
+        "truth": "human",
+        "plain": true,
+        "status": 200,
+        "content_id": "cdb627932df44d038da20ce0c5dd8c8c",
+        "guess": "unsure",
+        "confidence": 0.5529,
+        "model_score": 0.6685,
+        "style_score": 0.3796,
+        "label": "We can't tell whether a person or an AI tool wrote this. A lot of writing that people do entirely on their own lands here, so please don't read this as an accusation."
+      },
+      {
+        "id": "human_55_65",
+        "truth": "human",
+        "plain": true,
+        "status": 200,
+        "content_id": "d24747cf3d404ae0a70d7448fc465d7e",
+        "guess": "unsure",
+        "confidence": 0.6499,
+        "model_score": 0.7183,
+        "style_score": 0.5472,
+        "label": "We can't tell whether a person or an AI tool wrote this. A lot of writing that people do entirely on their own lands here, so please don't read this as an accusation."
+      },
+      {
+        "id": "human_20203_35",
+        "truth": "human",
+        "plain": false,
+        "status": 200,
+        "content_id": "eb4bdc90b475419b9720dfdda1f3ad48",
+        "guess": "unsure",
+        "confidence": 0.4716,
+        "model_score": 0.4471,
+        "style_score": 0.5083,
+        "label": "We can't tell whether a person or an AI tool wrote this. A lot of writing that people do entirely on their own lands here, so please don't read this as an accusation."
+      },
+      {
+        "id": "human_20203_65",
+        "truth": "human",
+        "plain": false,
+        "status": 200,
+        "content_id": "958e64b846e14bd694dfa17050269a02",
+        "guess": "unsure",
+        "confidence": 0.4252,
+        "model_score": 0.56,
+        "style_score": 0.2081,
+        "label": "We can't tell whether a person or an AI tool wrote this. A lot of writing that people do entirely on their own lands here, so please don't read this as an accusation."
+      },
+      {
+        "id": "human_242_35",
+        "truth": "human",
+        "plain": false,
+        "status": 200,
+        "content_id": "af99bdec7c5f43af8cf92b9d5ac42c0b",
+        "guess": "unsure",
+        "confidence": 0.3757,
+        "model_score": 0.4908,
+        "style_score": 0.2031,
+        "label": "We can't tell whether a person or an AI tool wrote this. A lot of writing that people do entirely on their own lands here, so please don't read this as an accusation."
+      },
+      {
+        "id": "human_242_65",
+        "truth": "human",
+        "plain": false,
+        "status": 200,
+        "content_id": "948da759ed4c4a9bb25064ae555c0a3c",
+        "guess": "unsure",
+        "confidence": 0.5195,
+        "model_score": 0.552,
+        "style_score": 0.4708,
+        "label": "We can't tell whether a person or an AI tool wrote this. A lot of writing that people do entirely on their own lands here, so please don't read this as an accusation."
+      },
+      {
+        "id": "human_2591_35",
+        "truth": "human",
+        "plain": true,
+        "status": 200,
+        "content_id": "099fd3552c4c41788ad539ad0334e35c",
+        "guess": "unsure",
+        "confidence": 0.4036,
+        "model_score": 0.5002,
+        "style_score": 0.2586,
+        "label": "We can't tell whether a person or an AI tool wrote this. A lot of writing that people do entirely on their own lands here, so please don't read this as an accusation."
+      },
+      {
+        "id": "human_2591_65",
+        "truth": "human",
+        "plain": true,
+        "status": 200,
+        "content_id": "ba3ee472f7f74e128f9327f2d477c8de",
+        "guess": "unsure",
+        "confidence": 0.4042,
+        "model_score": 0.536,
+        "style_score": 0.1896,
+        "label": "We can't tell whether a person or an AI tool wrote this. A lot of writing that people do entirely on their own lands here, so please don't read this as an accusation."
+      },
+      {
+        "id": "human_45_50",
+        "truth": "human",
+        "plain": false,
+        "status": 200,
+        "content_id": "fd7d9dad09f44e7f94df489bbe233e80",
+        "guess": "unsure",
+        "confidence": 0.4751,
+        "model_score": 0.5505,
+        "style_score": 0.3619,
+        "label": "We can't tell whether a person or an AI tool wrote this. A lot of writing that people do entirely on their own lands here, so please don't read this as an accusation."
+      },
+      {
+        "id": "human_14640_50",
+        "truth": "human",
+        "plain": true,
+        "status": 200,
+        "content_id": "473b5da2c57e4743aa82dcd9d4ccc9ea",
+        "guess": "unsure",
+        "confidence": 0.503,
+        "model_score": 0.6055,
+        "style_score": 0.3492,
+        "label": "We can't tell whether a person or an AI tool wrote this. A lot of writing that people do entirely on their own lands here, so please don't read this as an accusation."
+      },
+      {
+        "id": "human_113_50",
+        "truth": "human",
+        "plain": false,
+        "status": 200,
+        "content_id": "45141667de7d43159b10e1b39880c667",
+        "guess": "unsure",
+        "confidence": 0.3579,
+        "model_score": 0.4932,
+        "style_score": 0.1014,
+        "label": "We can't tell whether a person or an AI tool wrote this. A lot of writing that people do entirely on their own lands here, so please don't read this as an accusation."
+      },
+      {
+        "id": "human_1342_50",
+        "truth": "human",
+        "plain": false,
+        "status": 200,
+        "content_id": "7e7e9477a7634178b6e680fbc7d724c5",
+        "guess": "unsure",
+        "confidence": 0.4945,
+        "model_score": 0.4609,
+        "style_score": 0.5449,
+        "label": "We can't tell whether a person or an AI tool wrote this. A lot of writing that people do entirely on their own lands here, so please don't read this as an accusation."
+      },
+      {
+        "id": "human_12_50",
+        "truth": "human",
+        "plain": false,
+        "status": 200,
+        "content_id": "25fba0ead7b44295808568a77fd95208",
+        "guess": "unsure",
+        "confidence": 0.4909,
+        "model_score": 0.4006,
+        "style_score": 0.6264,
+        "label": "We can't tell whether a person or an AI tool wrote this. A lot of writing that people do entirely on their own lands here, so please don't read this as an accusation."
+      },
+      {
+        "id": "human_1260_50",
+        "truth": "human",
+        "plain": false,
+        "status": 200,
+        "content_id": "b198a4d61e8a47399be04eb46c6ddc56",
+        "guess": "human",
+        "confidence": 0.3187,
+        "model_score": 0.2761,
+        "style_score": 0.3825,
+        "label": "We think a person most likely wrote this. Our checks found the patterns we usually see in human writing."
+      },
+      {
+        "id": "ai_01",
+        "truth": "ai",
+        "plain": null,
+        "status": 200,
+        "content_id": "68d6a905ba9c49fc99bd2774bf8a1914",
+        "guess": "ai",
+        "confidence": 0.9124,
+        "model_score": 0.854,
+        "style_score": 1.0,
+        "label": "We think this was most likely written with an AI tool. Two separate checks both pointed that way, but they can be wrong: if you wrote this yourself, you can appeal and a person will review it."
+      },
+      {
+        "id": "ai_02",
+        "truth": "ai",
+        "plain": null,
+        "status": 200,
+        "content_id": "6432d0f76ee64ec2960a67d34166161a",
+        "guess": "ai",
+        "confidence": 0.974,
+        "model_score": 0.9566,
+        "style_score": 1.0,
+        "label": "We think this was most likely written with an AI tool. Two separate checks both pointed that way, but they can be wrong: if you wrote this yourself, you can appeal and a person will review it."
+      },
+      {
+        "id": "ai_03",
+        "truth": "ai",
+        "plain": null,
+        "status": 200,
+        "content_id": "aaa74cbd00d14ccf9d9ad663f8125455",
+        "guess": "ai",
+        "confidence": 0.915,
+        "model_score": 0.9017,
+        "style_score": 0.935,
+        "label": "We think this was most likely written with an AI tool. Two separate checks both pointed that way, but they can be wrong: if you wrote this yourself, you can appeal and a person will review it."
+      },
+      {
+        "id": "ai_04",
+        "truth": "ai",
+        "plain": null,
+        "status": 200,
+        "content_id": "29c9d62f2dd4497184dbd96f7e2c4504",
+        "guess": "ai",
+        "confidence": 0.8635,
+        "model_score": 0.853,
+        "style_score": 0.8792,
+        "label": "We think this was most likely written with an AI tool. Two separate checks both pointed that way, but they can be wrong: if you wrote this yourself, you can appeal and a person will review it."
+      },
+      {
+        "id": "ai_05",
+        "truth": "ai",
+        "plain": null,
+        "status": 200,
+        "content_id": "b0dc9491cd9c4270be44a4a2c571cf16",
+        "guess": "ai",
+        "confidence": 0.928,
+        "model_score": 0.8959,
+        "style_score": 0.9762,
+        "label": "We think this was most likely written with an AI tool. Two separate checks both pointed that way, but they can be wrong: if you wrote this yourself, you can appeal and a person will review it."
+      },
+      {
+        "id": "ai_06",
+        "truth": "ai",
+        "plain": null,
+        "status": 200,
+        "content_id": "47abc1a65c764d8fbc779ea352ded1d4",
+        "guess": "ai",
+        "confidence": 0.8943,
+        "model_score": 0.9102,
+        "style_score": 0.8704,
+        "label": "We think this was most likely written with an AI tool. Two separate checks both pointed that way, but they can be wrong: if you wrote this yourself, you can appeal and a person will review it."
+      },
+      {
+        "id": "ai_07",
+        "truth": "ai",
+        "plain": null,
+        "status": 200,
+        "content_id": "86b6bf1651154c62917d772453347645",
+        "guess": "ai",
+        "confidence": 0.8547,
+        "model_score": 0.8886,
+        "style_score": 0.8039,
+        "label": "We think this was most likely written with an AI tool. Two separate checks both pointed that way, but they can be wrong: if you wrote this yourself, you can appeal and a person will review it."
+      },
+      {
+        "id": "ai_08",
+        "truth": "ai",
+        "plain": null,
+        "status": 200,
+        "content_id": "2c87b91f79a5493dbaf31736dbd49c6d",
+        "guess": "ai",
+        "confidence": 0.8383,
+        "model_score": 0.9462,
+        "style_score": 0.6764,
+        "label": "We think this was most likely written with an AI tool. Two separate checks both pointed that way, but they can be wrong: if you wrote this yourself, you can appeal and a person will review it."
+      },
+      {
+        "id": "ai_09",
+        "truth": "ai",
+        "plain": null,
+        "status": 200,
+        "content_id": "60fc88ea31c0444dab099e4ba6c5ed9a",
+        "guess": "ai",
+        "confidence": 0.9064,
+        "model_score": 0.9338,
+        "style_score": 0.8653,
+        "label": "We think this was most likely written with an AI tool. Two separate checks both pointed that way, but they can be wrong: if you wrote this yourself, you can appeal and a person will review it."
+      },
+      {
+        "id": "ai_10",
+        "truth": "ai",
+        "plain": null,
+        "status": 200,
+        "content_id": "f71221eb7e38496fa8d4c897fab27c7e",
+        "guess": "ai",
+        "confidence": 0.7953,
+        "model_score": 0.8419,
+        "style_score": 0.7255,
+        "label": "We think this was most likely written with an AI tool. Two separate checks both pointed that way, but they can be wrong: if you wrote this yourself, you can appeal and a person will review it."
+      }
+    ]
+  },
+  {
+    "trial": 2,
+    "c1": {
+      "false_positives": [],
+      "count": 0,
+      "pass": true
+    },
+    "c2": {
+      "mean_ai": 0.8882,
+      "mean_human": 0.4724,
+      "gap": 0.4158,
+      "pass": true
+    },
+    "c3": {
+      "labels_seen": [
+        "ai",
+        "human",
+        "unsure"
+      ],
+      "sweep_pass": true,
+      "sweep_changes": [
+        0.35,
+        0.7501
+      ],
+      "pass": true
+    },
+    "c4": {
+      "appeals_ok": 5,
+      "unknown_ok": 3,
+      "appeals": [
+        {
+          "content_id": "93c38f03cc084c0ea73cd47b0b98d824",
+          "reason": "evaluate.py trial 2: I wrote human_2397_35 myself.",
+          "status": 200,
+          "returned_status": "under_review",
+          "appeal_entries": 1,
+          "reason_logged": true
+        },
+        {
+          "content_id": "7f3b134c01ab499da04e71272cea70b2",
+          "reason": "evaluate.py trial 2: I wrote human_2397_65 myself.",
+          "status": 200,
+          "returned_status": "under_review",
+          "appeal_entries": 1,
+          "reason_logged": true
+        },
+        {
+          "content_id": "29ca2463625b445b867230c50c5555f7",
+          "reason": "evaluate.py trial 2: I wrote human_2376_35 myself.",
+          "status": 200,
+          "returned_status": "under_review",
+          "appeal_entries": 1,
+          "reason_logged": true
+        },
+        {
+          "content_id": "090dbcc5ff10454aa57e02dca824a2f9",
+          "reason": "evaluate.py trial 2: I wrote human_2376_65 myself.",
+          "status": 200,
+          "returned_status": "under_review",
+          "appeal_entries": 1,
+          "reason_logged": true
+        },
+        {
+          "content_id": "472d23e9288c45798f655b84ca887385",
+          "reason": "evaluate.py trial 2: I wrote human_14668_35 myself.",
+          "status": 200,
+          "returned_status": "under_review",
+          "appeal_entries": 1,
+          "reason_logged": true
+        }
+      ],
+      "unknown": [
+        {
+          "content_id": "449eec91944f4ef487e69d3c7d8675f2",
+          "status": 404,
+          "appeal_entries": 0
+        },
+        {
+          "content_id": "0dd32489b19146828168304978e459c1",
+          "status": 404,
+          "appeal_entries": 0
+        },
+        {
+          "content_id": "3ef2bde4674f47bdbd5671f19a7ea0e8",
+          "status": 404,
+          "appeal_entries": 0
+        }
+      ],
+      "pass": true
+    },
+    "c5": {
+      "refused_cleanly": 12,
+      "new_decisions": 0,
+      "requests": [
+        {
+          "request": "non-JSON body",
+          "status": 400,
+          "error": "invalid_json"
+        },
+        {
+          "request": "wrong content type",
+          "status": 415,
+          "error": "unsupported_media_type"
+        },
+        {
+          "request": "JSON list, not object",
+          "status": 400,
+          "error": "invalid_body"
+        },
+        {
+          "request": "missing text",
+          "status": 400,
+          "error": "missing_field"
+        },
+        {
+          "request": "empty text",
+          "status": 400,
+          "error": "empty_field"
+        },
+        {
+          "request": "whitespace-only text",
+          "status": 400,
+          "error": "empty_field"
+        },
+        {
+          "request": "non-string text",
+          "status": 400,
+          "error": "invalid_type"
+        },
+        {
+          "request": "missing creator_id",
+          "status": 400,
+          "error": "missing_field"
+        },
+        {
+          "request": "empty creator_id",
+          "status": 400,
+          "error": "empty_field"
+        },
+        {
+          "request": "non-string creator_id",
+          "status": 400,
+          "error": "invalid_type"
+        },
+        {
+          "request": "text over size limit",
+          "status": 413,
+          "error": "field_too_long"
+        },
+        {
+          "request": "text too short to score",
+          "status": 422,
+          "error": "text_too_short"
+        }
+      ],
+      "pass": true
+    },
+    "submissions": [
+      {
+        "id": "human_2397_35",
+        "truth": "human",
+        "plain": false,
+        "status": 200,
+        "content_id": "4606a830520d4ce89cd0160a24ba12d0",
+        "guess": "unsure",
+        "confidence": 0.5176,
+        "model_score": 0.5052,
+        "style_score": 0.5363,
+        "label": "We can't tell whether a person or an AI tool wrote this. A lot of writing that people do entirely on their own lands here, so please don't read this as an accusation."
+      },
+      {
+        "id": "human_2397_65",
+        "truth": "human",
+        "plain": false,
+        "status": 200,
+        "content_id": "f5914884370848ef9121a0b17086235c",
+        "guess": "unsure",
+        "confidence": 0.5429,
+        "model_score": 0.5173,
+        "style_score": 0.5812,
+        "label": "We can't tell whether a person or an AI tool wrote this. A lot of writing that people do entirely on their own lands here, so please don't read this as an accusation."
+      },
+      {
+        "id": "human_2376_35",
+        "truth": "human",
+        "plain": true,
+        "status": 200,
+        "content_id": "0438e4ce0e504611b8df929521510e67",
+        "guess": "unsure",
+        "confidence": 0.5302,
+        "model_score": 0.7988,
+        "style_score": 0.1878,
+        "label": "We can't tell whether a person or an AI tool wrote this. A lot of writing that people do entirely on their own lands here, so please don't read this as an accusation."
+      },
+      {
+        "id": "human_2376_65",
+        "truth": "human",
+        "plain": true,
+        "status": 200,
+        "content_id": "7b306a752dd141e9b18ff4307cc6a2be",
+        "guess": "unsure",
+        "confidence": 0.705,
+        "model_score": 0.773,
+        "style_score": 0.603,
+        "label": "We can't tell whether a person or an AI tool wrote this. A lot of writing that people do entirely on their own lands here, so please don't read this as an accusation."
+      },
+      {
+        "id": "human_14668_35",
+        "truth": "human",
+        "plain": true,
+        "status": 200,
+        "content_id": "248a37b30cba44f7b8d2bc9dbef15fdb",
+        "guess": "unsure",
+        "confidence": 0.5114,
+        "model_score": 0.6406,
+        "style_score": 0.3186,
+        "label": "We can't tell whether a person or an AI tool wrote this. A lot of writing that people do entirely on their own lands here, so please don't read this as an accusation."
+      },
+      {
+        "id": "human_14668_65",
+        "truth": "human",
+        "plain": true,
+        "status": 200,
+        "content_id": "a3f9d03522ab404ba4d2b5e1be8db548",
+        "guess": "human",
+        "confidence": 0.1988,
+        "model_score": 0.1512,
+        "style_score": 0.2703,
+        "label": "We think a person most likely wrote this. Our checks found the patterns we usually see in human writing."
+      },
+      {
+        "id": "human_55_35",
+        "truth": "human",
+        "plain": true,
+        "status": 200,
+        "content_id": "19c07bc9d08a45628cc7fa50c10f0b2e",
+        "guess": "unsure",
+        "confidence": 0.5529,
+        "model_score": 0.6685,
+        "style_score": 0.3796,
+        "label": "We can't tell whether a person or an AI tool wrote this. A lot of writing that people do entirely on their own lands here, so please don't read this as an accusation."
+      },
+      {
+        "id": "human_55_65",
+        "truth": "human",
+        "plain": true,
+        "status": 200,
+        "content_id": "56bd27c8bf5b4b5f95828e8334e1f8fe",
+        "guess": "unsure",
+        "confidence": 0.6499,
+        "model_score": 0.7183,
+        "style_score": 0.5472,
+        "label": "We can't tell whether a person or an AI tool wrote this. A lot of writing that people do entirely on their own lands here, so please don't read this as an accusation."
+      },
+      {
+        "id": "human_20203_35",
+        "truth": "human",
+        "plain": false,
+        "status": 200,
+        "content_id": "9e623fe1e1794d7ba18e642cb5e8e7bb",
+        "guess": "unsure",
+        "confidence": 0.4716,
+        "model_score": 0.4471,
+        "style_score": 0.5083,
+        "label": "We can't tell whether a person or an AI tool wrote this. A lot of writing that people do entirely on their own lands here, so please don't read this as an accusation."
+      },
+      {
+        "id": "human_20203_65",
+        "truth": "human",
+        "plain": false,
+        "status": 200,
+        "content_id": "98fbe69e13d7443bb22d1b92b1c0e1b5",
+        "guess": "unsure",
+        "confidence": 0.4252,
+        "model_score": 0.56,
+        "style_score": 0.2081,
+        "label": "We can't tell whether a person or an AI tool wrote this. A lot of writing that people do entirely on their own lands here, so please don't read this as an accusation."
+      },
+      {
+        "id": "human_242_35",
+        "truth": "human",
+        "plain": false,
+        "status": 200,
+        "content_id": "0e55f526138147d08884ea1f4d401e13",
+        "guess": "unsure",
+        "confidence": 0.3757,
+        "model_score": 0.4908,
+        "style_score": 0.2031,
+        "label": "We can't tell whether a person or an AI tool wrote this. A lot of writing that people do entirely on their own lands here, so please don't read this as an accusation."
+      },
+      {
+        "id": "human_242_65",
+        "truth": "human",
+        "plain": false,
+        "status": 200,
+        "content_id": "aed6fb3e4c4c497da469d306e925e259",
+        "guess": "unsure",
+        "confidence": 0.5195,
+        "model_score": 0.552,
+        "style_score": 0.4708,
+        "label": "We can't tell whether a person or an AI tool wrote this. A lot of writing that people do entirely on their own lands here, so please don't read this as an accusation."
+      },
+      {
+        "id": "human_2591_35",
+        "truth": "human",
+        "plain": true,
+        "status": 200,
+        "content_id": "cf697482ddc84a9f98c9b40a9e4e4594",
+        "guess": "unsure",
+        "confidence": 0.4036,
+        "model_score": 0.5002,
+        "style_score": 0.2586,
+        "label": "We can't tell whether a person or an AI tool wrote this. A lot of writing that people do entirely on their own lands here, so please don't read this as an accusation."
+      },
+      {
+        "id": "human_2591_65",
+        "truth": "human",
+        "plain": true,
+        "status": 200,
+        "content_id": "4e204fe74f4f4b0da0737a35d663b543",
+        "guess": "unsure",
+        "confidence": 0.4042,
+        "model_score": 0.536,
+        "style_score": 0.1896,
+        "label": "We can't tell whether a person or an AI tool wrote this. A lot of writing that people do entirely on their own lands here, so please don't read this as an accusation."
+      },
+      {
+        "id": "human_45_50",
+        "truth": "human",
+        "plain": false,
+        "status": 200,
+        "content_id": "f77adf1ed8cd491ea7ebc490d8485e1d",
+        "guess": "unsure",
+        "confidence": 0.4751,
+        "model_score": 0.5505,
+        "style_score": 0.3619,
+        "label": "We can't tell whether a person or an AI tool wrote this. A lot of writing that people do entirely on their own lands here, so please don't read this as an accusation."
+      },
+      {
+        "id": "human_14640_50",
+        "truth": "human",
+        "plain": true,
+        "status": 200,
+        "content_id": "8e77df6781a04629a4c72447e9defae0",
+        "guess": "unsure",
+        "confidence": 0.503,
+        "model_score": 0.6055,
+        "style_score": 0.3492,
+        "label": "We can't tell whether a person or an AI tool wrote this. A lot of writing that people do entirely on their own lands here, so please don't read this as an accusation."
+      },
+      {
+        "id": "human_113_50",
+        "truth": "human",
+        "plain": false,
+        "status": 200,
+        "content_id": "3d82f52c89154240aba7b4913e989519",
+        "guess": "unsure",
+        "confidence": 0.3579,
+        "model_score": 0.4932,
+        "style_score": 0.1014,
+        "label": "We can't tell whether a person or an AI tool wrote this. A lot of writing that people do entirely on their own lands here, so please don't read this as an accusation."
+      },
+      {
+        "id": "human_1342_50",
+        "truth": "human",
+        "plain": false,
+        "status": 200,
+        "content_id": "c384376cf7084407ae9047c426f13a53",
+        "guess": "unsure",
+        "confidence": 0.4945,
+        "model_score": 0.4609,
+        "style_score": 0.5449,
+        "label": "We can't tell whether a person or an AI tool wrote this. A lot of writing that people do entirely on their own lands here, so please don't read this as an accusation."
+      },
+      {
+        "id": "human_12_50",
+        "truth": "human",
+        "plain": false,
+        "status": 200,
+        "content_id": "40857bfb5f1f4bfbbe258e7e7ed5a565",
+        "guess": "unsure",
+        "confidence": 0.4909,
+        "model_score": 0.4006,
+        "style_score": 0.6264,
+        "label": "We can't tell whether a person or an AI tool wrote this. A lot of writing that people do entirely on their own lands here, so please don't read this as an accusation."
+      },
+      {
+        "id": "human_1260_50",
+        "truth": "human",
+        "plain": false,
+        "status": 200,
+        "content_id": "f6ffd6cc7fd247eabba834bbce050f15",
+        "guess": "human",
+        "confidence": 0.3187,
+        "model_score": 0.2761,
+        "style_score": 0.3825,
+        "label": "We think a person most likely wrote this. Our checks found the patterns we usually see in human writing."
+      },
+      {
+        "id": "ai_01",
+        "truth": "ai",
+        "plain": null,
+        "status": 200,
+        "content_id": "51125aba0f664022a01a94a27bb78803",
+        "guess": "ai",
+        "confidence": 0.9124,
+        "model_score": 0.854,
+        "style_score": 1.0,
+        "label": "We think this was most likely written with an AI tool. Two separate checks both pointed that way, but they can be wrong: if you wrote this yourself, you can appeal and a person will review it."
+      },
+      {
+        "id": "ai_02",
+        "truth": "ai",
+        "plain": null,
+        "status": 200,
+        "content_id": "96da7bb655944843986d8c9389e65d6f",
+        "guess": "ai",
+        "confidence": 0.974,
+        "model_score": 0.9566,
+        "style_score": 1.0,
+        "label": "We think this was most likely written with an AI tool. Two separate checks both pointed that way, but they can be wrong: if you wrote this yourself, you can appeal and a person will review it."
+      },
+      {
+        "id": "ai_03",
+        "truth": "ai",
+        "plain": null,
+        "status": 200,
+        "content_id": "8ece28ebe8974fe9b834451c1febabdb",
+        "guess": "ai",
+        "confidence": 0.915,
+        "model_score": 0.9017,
+        "style_score": 0.935,
+        "label": "We think this was most likely written with an AI tool. Two separate checks both pointed that way, but they can be wrong: if you wrote this yourself, you can appeal and a person will review it."
+      },
+      {
+        "id": "ai_04",
+        "truth": "ai",
+        "plain": null,
+        "status": 200,
+        "content_id": "d0302c065af54a8196c56597cd90e5cf",
+        "guess": "ai",
+        "confidence": 0.8635,
+        "model_score": 0.853,
+        "style_score": 0.8792,
+        "label": "We think this was most likely written with an AI tool. Two separate checks both pointed that way, but they can be wrong: if you wrote this yourself, you can appeal and a person will review it."
+      },
+      {
+        "id": "ai_05",
+        "truth": "ai",
+        "plain": null,
+        "status": 200,
+        "content_id": "5198a068a485403d86e0c3146aec6d5a",
+        "guess": "ai",
+        "confidence": 0.928,
+        "model_score": 0.8959,
+        "style_score": 0.9762,
+        "label": "We think this was most likely written with an AI tool. Two separate checks both pointed that way, but they can be wrong: if you wrote this yourself, you can appeal and a person will review it."
+      },
+      {
+        "id": "ai_06",
+        "truth": "ai",
+        "plain": null,
+        "status": 200,
+        "content_id": "6137e575881e422db3cc99a4e74cbffe",
+        "guess": "ai",
+        "confidence": 0.8943,
+        "model_score": 0.9102,
+        "style_score": 0.8704,
+        "label": "We think this was most likely written with an AI tool. Two separate checks both pointed that way, but they can be wrong: if you wrote this yourself, you can appeal and a person will review it."
+      },
+      {
+        "id": "ai_07",
+        "truth": "ai",
+        "plain": null,
+        "status": 200,
+        "content_id": "1d84798e63e841068ae58765541ca2fb",
+        "guess": "ai",
+        "confidence": 0.8547,
+        "model_score": 0.8886,
+        "style_score": 0.8039,
+        "label": "We think this was most likely written with an AI tool. Two separate checks both pointed that way, but they can be wrong: if you wrote this yourself, you can appeal and a person will review it."
+      },
+      {
+        "id": "ai_08",
+        "truth": "ai",
+        "plain": null,
+        "status": 200,
+        "content_id": "f5e78e759d254eaaac619ac212961c8f",
+        "guess": "ai",
+        "confidence": 0.8383,
+        "model_score": 0.9462,
+        "style_score": 0.6764,
+        "label": "We think this was most likely written with an AI tool. Two separate checks both pointed that way, but they can be wrong: if you wrote this yourself, you can appeal and a person will review it."
+      },
+      {
+        "id": "ai_09",
+        "truth": "ai",
+        "plain": null,
+        "status": 200,
+        "content_id": "5aeab9dded904f4eae9f8396521ba0a6",
+        "guess": "ai",
+        "confidence": 0.9064,
+        "model_score": 0.9338,
+        "style_score": 0.8653,
+        "label": "We think this was most likely written with an AI tool. Two separate checks both pointed that way, but they can be wrong: if you wrote this yourself, you can appeal and a person will review it."
+      },
+      {
+        "id": "ai_10",
+        "truth": "ai",
+        "plain": null,
+        "status": 200,
+        "content_id": "c771aad0e6164809b945c4c41643a07c",
+        "guess": "ai",
+        "confidence": 0.7953,
+        "model_score": 0.8419,
+        "style_score": 0.7255,
+        "label": "We think this was most likely written with an AI tool. Two separate checks both pointed that way, but they can be wrong: if you wrote this yourself, you can appeal and a person will review it."
+      }
+    ]
+  },
+  {
+    "trial": 3,
+    "c1": {
+      "false_positives": [],
+      "count": 0,
+      "pass": true
+    },
+    "c2": {
+      "mean_ai": 0.8882,
+      "mean_human": 0.4724,
+      "gap": 0.4158,
+      "pass": true
+    },
+    "c3": {
+      "labels_seen": [
+        "ai",
+        "human",
+        "unsure"
+      ],
+      "sweep_pass": true,
+      "sweep_changes": [
+        0.35,
+        0.7501
+      ],
+      "pass": true
+    },
+    "c4": {
+      "appeals_ok": 5,
+      "unknown_ok": 3,
+      "appeals": [
+        {
+          "content_id": "cffac672e6d240f1bd0bc4f7635bcbaf",
+          "reason": "evaluate.py trial 3: I wrote human_2397_35 myself.",
+          "status": 200,
+          "returned_status": "under_review",
+          "appeal_entries": 1,
+          "reason_logged": true
+        },
+        {
+          "content_id": "6324341603cc4781a79871c799f36ae8",
+          "reason": "evaluate.py trial 3: I wrote human_2397_65 myself.",
+          "status": 200,
+          "returned_status": "under_review",
+          "appeal_entries": 1,
+          "reason_logged": true
+        },
+        {
+          "content_id": "dc6ead5aff6b4484805280546a9c1c01",
+          "reason": "evaluate.py trial 3: I wrote human_2376_35 myself.",
+          "status": 200,
+          "returned_status": "under_review",
+          "appeal_entries": 1,
+          "reason_logged": true
+        },
+        {
+          "content_id": "f768f4723c3043fa8e005b1155ec08d3",
+          "reason": "evaluate.py trial 3: I wrote human_2376_65 myself.",
+          "status": 200,
+          "returned_status": "under_review",
+          "appeal_entries": 1,
+          "reason_logged": true
+        },
+        {
+          "content_id": "ef1cfadba6734b90b4a1ae8a75409024",
+          "reason": "evaluate.py trial 3: I wrote human_14668_35 myself.",
+          "status": 200,
+          "returned_status": "under_review",
+          "appeal_entries": 1,
+          "reason_logged": true
+        }
+      ],
+      "unknown": [
+        {
+          "content_id": "c003e8d1efa244538f7620e7baa7e20a",
+          "status": 404,
+          "appeal_entries": 0
+        },
+        {
+          "content_id": "6d5e34e025ad4d1a890bc613762c1a6f",
+          "status": 404,
+          "appeal_entries": 0
+        },
+        {
+          "content_id": "3adfe7cd07454201a539d0c625bba6fe",
+          "status": 404,
+          "appeal_entries": 0
+        }
+      ],
+      "pass": true
+    },
+    "c5": {
+      "refused_cleanly": 12,
+      "new_decisions": 0,
+      "requests": [
+        {
+          "request": "non-JSON body",
+          "status": 400,
+          "error": "invalid_json"
+        },
+        {
+          "request": "wrong content type",
+          "status": 415,
+          "error": "unsupported_media_type"
+        },
+        {
+          "request": "JSON list, not object",
+          "status": 400,
+          "error": "invalid_body"
+        },
+        {
+          "request": "missing text",
+          "status": 400,
+          "error": "missing_field"
+        },
+        {
+          "request": "empty text",
+          "status": 400,
+          "error": "empty_field"
+        },
+        {
+          "request": "whitespace-only text",
+          "status": 400,
+          "error": "empty_field"
+        },
+        {
+          "request": "non-string text",
+          "status": 400,
+          "error": "invalid_type"
+        },
+        {
+          "request": "missing creator_id",
+          "status": 400,
+          "error": "missing_field"
+        },
+        {
+          "request": "empty creator_id",
+          "status": 400,
+          "error": "empty_field"
+        },
+        {
+          "request": "non-string creator_id",
+          "status": 400,
+          "error": "invalid_type"
+        },
+        {
+          "request": "text over size limit",
+          "status": 413,
+          "error": "field_too_long"
+        },
+        {
+          "request": "text too short to score",
+          "status": 422,
+          "error": "text_too_short"
+        }
+      ],
+      "pass": true
+    },
+    "submissions": [
+      {
+        "id": "human_2397_35",
+        "truth": "human",
+        "plain": false,
+        "status": 200,
+        "content_id": "812a22f2823741d78cca7feaeef2f6c0",
+        "guess": "unsure",
+        "confidence": 0.5176,
+        "model_score": 0.5052,
+        "style_score": 0.5363,
+        "label": "We can't tell whether a person or an AI tool wrote this. A lot of writing that people do entirely on their own lands here, so please don't read this as an accusation."
+      },
+      {
+        "id": "human_2397_65",
+        "truth": "human",
+        "plain": false,
+        "status": 200,
+        "content_id": "95f8d84efe4a4e4d88c2c5ec12b5ebd2",
+        "guess": "unsure",
+        "confidence": 0.5429,
+        "model_score": 0.5173,
+        "style_score": 0.5812,
+        "label": "We can't tell whether a person or an AI tool wrote this. A lot of writing that people do entirely on their own lands here, so please don't read this as an accusation."
+      },
+      {
+        "id": "human_2376_35",
+        "truth": "human",
+        "plain": true,
+        "status": 200,
+        "content_id": "e17d8e62f2b64ff28987160bf8c70b40",
+        "guess": "unsure",
+        "confidence": 0.5302,
+        "model_score": 0.7988,
+        "style_score": 0.1878,
+        "label": "We can't tell whether a person or an AI tool wrote this. A lot of writing that people do entirely on their own lands here, so please don't read this as an accusation."
+      },
+      {
+        "id": "human_2376_65",
+        "truth": "human",
+        "plain": true,
+        "status": 200,
+        "content_id": "766926bc0434428793b36c03fea4f339",
+        "guess": "unsure",
+        "confidence": 0.705,
+        "model_score": 0.773,
+        "style_score": 0.603,
+        "label": "We can't tell whether a person or an AI tool wrote this. A lot of writing that people do entirely on their own lands here, so please don't read this as an accusation."
+      },
+      {
+        "id": "human_14668_35",
+        "truth": "human",
+        "plain": true,
+        "status": 200,
+        "content_id": "0756b00552df4292bba7c104da83c892",
+        "guess": "unsure",
+        "confidence": 0.5114,
+        "model_score": 0.6406,
+        "style_score": 0.3186,
+        "label": "We can't tell whether a person or an AI tool wrote this. A lot of writing that people do entirely on their own lands here, so please don't read this as an accusation."
+      },
+      {
+        "id": "human_14668_65",
+        "truth": "human",
+        "plain": true,
+        "status": 200,
+        "content_id": "83057d5e9f5f4b37a9494456e04e4b54",
+        "guess": "human",
+        "confidence": 0.1988,
+        "model_score": 0.1512,
+        "style_score": 0.2703,
+        "label": "We think a person most likely wrote this. Our checks found the patterns we usually see in human writing."
+      },
+      {
+        "id": "human_55_35",
+        "truth": "human",
+        "plain": true,
+        "status": 200,
+        "content_id": "6a583270933b4e6ea9d1d0ff83c47e90",
+        "guess": "unsure",
+        "confidence": 0.5529,
+        "model_score": 0.6685,
+        "style_score": 0.3796,
+        "label": "We can't tell whether a person or an AI tool wrote this. A lot of writing that people do entirely on their own lands here, so please don't read this as an accusation."
+      },
+      {
+        "id": "human_55_65",
+        "truth": "human",
+        "plain": true,
+        "status": 200,
+        "content_id": "a4be59ebcced40c2900ab3c3f2827662",
+        "guess": "unsure",
+        "confidence": 0.6499,
+        "model_score": 0.7183,
+        "style_score": 0.5472,
+        "label": "We can't tell whether a person or an AI tool wrote this. A lot of writing that people do entirely on their own lands here, so please don't read this as an accusation."
+      },
+      {
+        "id": "human_20203_35",
+        "truth": "human",
+        "plain": false,
+        "status": 200,
+        "content_id": "4955ecd624ff4ef3976e1f73cc1b778f",
+        "guess": "unsure",
+        "confidence": 0.4716,
+        "model_score": 0.4471,
+        "style_score": 0.5083,
+        "label": "We can't tell whether a person or an AI tool wrote this. A lot of writing that people do entirely on their own lands here, so please don't read this as an accusation."
+      },
+      {
+        "id": "human_20203_65",
+        "truth": "human",
+        "plain": false,
+        "status": 200,
+        "content_id": "acd6a3c90af94085977b7389ea16f8f7",
+        "guess": "unsure",
+        "confidence": 0.4252,
+        "model_score": 0.56,
+        "style_score": 0.2081,
+        "label": "We can't tell whether a person or an AI tool wrote this. A lot of writing that people do entirely on their own lands here, so please don't read this as an accusation."
+      },
+      {
+        "id": "human_242_35",
+        "truth": "human",
+        "plain": false,
+        "status": 200,
+        "content_id": "eec31d6555624fcf85c320c865e3521a",
+        "guess": "unsure",
+        "confidence": 0.3757,
+        "model_score": 0.4908,
+        "style_score": 0.2031,
+        "label": "We can't tell whether a person or an AI tool wrote this. A lot of writing that people do entirely on their own lands here, so please don't read this as an accusation."
+      },
+      {
+        "id": "human_242_65",
+        "truth": "human",
+        "plain": false,
+        "status": 200,
+        "content_id": "02be8a17796e40a68249328770995a67",
+        "guess": "unsure",
+        "confidence": 0.5195,
+        "model_score": 0.552,
+        "style_score": 0.4708,
+        "label": "We can't tell whether a person or an AI tool wrote this. A lot of writing that people do entirely on their own lands here, so please don't read this as an accusation."
+      },
+      {
+        "id": "human_2591_35",
+        "truth": "human",
+        "plain": true,
+        "status": 200,
+        "content_id": "a5a61d9e9ff3475ab5235eb0307e84ca",
+        "guess": "unsure",
+        "confidence": 0.4036,
+        "model_score": 0.5002,
+        "style_score": 0.2586,
+        "label": "We can't tell whether a person or an AI tool wrote this. A lot of writing that people do entirely on their own lands here, so please don't read this as an accusation."
+      },
+      {
+        "id": "human_2591_65",
+        "truth": "human",
+        "plain": true,
+        "status": 200,
+        "content_id": "12561c96933a434a8e297700c0bdae89",
+        "guess": "unsure",
+        "confidence": 0.4042,
+        "model_score": 0.536,
+        "style_score": 0.1896,
+        "label": "We can't tell whether a person or an AI tool wrote this. A lot of writing that people do entirely on their own lands here, so please don't read this as an accusation."
+      },
+      {
+        "id": "human_45_50",
+        "truth": "human",
+        "plain": false,
+        "status": 200,
+        "content_id": "8db5dc02c1c64f449c07889a0823c417",
+        "guess": "unsure",
+        "confidence": 0.4751,
+        "model_score": 0.5505,
+        "style_score": 0.3619,
+        "label": "We can't tell whether a person or an AI tool wrote this. A lot of writing that people do entirely on their own lands here, so please don't read this as an accusation."
+      },
+      {
+        "id": "human_14640_50",
+        "truth": "human",
+        "plain": true,
+        "status": 200,
+        "content_id": "80c6e80b958448cc8dffb93be263fd6a",
+        "guess": "unsure",
+        "confidence": 0.503,
+        "model_score": 0.6055,
+        "style_score": 0.3492,
+        "label": "We can't tell whether a person or an AI tool wrote this. A lot of writing that people do entirely on their own lands here, so please don't read this as an accusation."
+      },
+      {
+        "id": "human_113_50",
+        "truth": "human",
+        "plain": false,
+        "status": 200,
+        "content_id": "661dbd7465ee4adeacb180f1aa4bbbf7",
+        "guess": "unsure",
+        "confidence": 0.3579,
+        "model_score": 0.4932,
+        "style_score": 0.1014,
+        "label": "We can't tell whether a person or an AI tool wrote this. A lot of writing that people do entirely on their own lands here, so please don't read this as an accusation."
+      },
+      {
+        "id": "human_1342_50",
+        "truth": "human",
+        "plain": false,
+        "status": 200,
+        "content_id": "8cc71fcd70514bc39361dc1c7ac3514b",
+        "guess": "unsure",
+        "confidence": 0.4945,
+        "model_score": 0.4609,
+        "style_score": 0.5449,
+        "label": "We can't tell whether a person or an AI tool wrote this. A lot of writing that people do entirely on their own lands here, so please don't read this as an accusation."
+      },
+      {
+        "id": "human_12_50",
+        "truth": "human",
+        "plain": false,
+        "status": 200,
+        "content_id": "79d4e2a2a86f448e8d4a0466b2294334",
+        "guess": "unsure",
+        "confidence": 0.4909,
+        "model_score": 0.4006,
+        "style_score": 0.6264,
+        "label": "We can't tell whether a person or an AI tool wrote this. A lot of writing that people do entirely on their own lands here, so please don't read this as an accusation."
+      },
+      {
+        "id": "human_1260_50",
+        "truth": "human",
+        "plain": false,
+        "status": 200,
+        "content_id": "602831f2019d40e0928e1186d210c93b",
+        "guess": "human",
+        "confidence": 0.3187,
+        "model_score": 0.2761,
+        "style_score": 0.3825,
+        "label": "We think a person most likely wrote this. Our checks found the patterns we usually see in human writing."
+      },
+      {
+        "id": "ai_01",
+        "truth": "ai",
+        "plain": null,
+        "status": 200,
+        "content_id": "f15a4d8e78fc49309f51abd0e076791b",
+        "guess": "ai",
+        "confidence": 0.9124,
+        "model_score": 0.854,
+        "style_score": 1.0,
+        "label": "We think this was most likely written with an AI tool. Two separate checks both pointed that way, but they can be wrong: if you wrote this yourself, you can appeal and a person will review it."
+      },
+      {
+        "id": "ai_02",
+        "truth": "ai",
+        "plain": null,
+        "status": 200,
+        "content_id": "923ccf24a7e64b209436287cb855d9c2",
+        "guess": "ai",
+        "confidence": 0.974,
+        "model_score": 0.9566,
+        "style_score": 1.0,
+        "label": "We think this was most likely written with an AI tool. Two separate checks both pointed that way, but they can be wrong: if you wrote this yourself, you can appeal and a person will review it."
+      },
+      {
+        "id": "ai_03",
+        "truth": "ai",
+        "plain": null,
+        "status": 200,
+        "content_id": "2b61d1859fd64c1eb44a1ee1b0694f7b",
+        "guess": "ai",
+        "confidence": 0.915,
+        "model_score": 0.9017,
+        "style_score": 0.935,
+        "label": "We think this was most likely written with an AI tool. Two separate checks both pointed that way, but they can be wrong: if you wrote this yourself, you can appeal and a person will review it."
+      },
+      {
+        "id": "ai_04",
+        "truth": "ai",
+        "plain": null,
+        "status": 200,
+        "content_id": "7accd38b8d014305b9fa1239167feacb",
+        "guess": "ai",
+        "confidence": 0.8635,
+        "model_score": 0.853,
+        "style_score": 0.8792,
+        "label": "We think this was most likely written with an AI tool. Two separate checks both pointed that way, but they can be wrong: if you wrote this yourself, you can appeal and a person will review it."
+      },
+      {
+        "id": "ai_05",
+        "truth": "ai",
+        "plain": null,
+        "status": 200,
+        "content_id": "e45f7670bfa248389e6124738fca0f86",
+        "guess": "ai",
+        "confidence": 0.928,
+        "model_score": 0.8959,
+        "style_score": 0.9762,
+        "label": "We think this was most likely written with an AI tool. Two separate checks both pointed that way, but they can be wrong: if you wrote this yourself, you can appeal and a person will review it."
+      },
+      {
+        "id": "ai_06",
+        "truth": "ai",
+        "plain": null,
+        "status": 200,
+        "content_id": "d37c3430dc124c0aa8f4bdeb8ca3b999",
+        "guess": "ai",
+        "confidence": 0.8943,
+        "model_score": 0.9102,
+        "style_score": 0.8704,
+        "label": "We think this was most likely written with an AI tool. Two separate checks both pointed that way, but they can be wrong: if you wrote this yourself, you can appeal and a person will review it."
+      },
+      {
+        "id": "ai_07",
+        "truth": "ai",
+        "plain": null,
+        "status": 200,
+        "content_id": "6447ae2d84ff4fad94817c0170d0397e",
+        "guess": "ai",
+        "confidence": 0.8547,
+        "model_score": 0.8886,
+        "style_score": 0.8039,
+        "label": "We think this was most likely written with an AI tool. Two separate checks both pointed that way, but they can be wrong: if you wrote this yourself, you can appeal and a person will review it."
+      },
+      {
+        "id": "ai_08",
+        "truth": "ai",
+        "plain": null,
+        "status": 200,
+        "content_id": "62c06d42d35a4bc6a02116499108ff96",
+        "guess": "ai",
+        "confidence": 0.8383,
+        "model_score": 0.9462,
+        "style_score": 0.6764,
+        "label": "We think this was most likely written with an AI tool. Two separate checks both pointed that way, but they can be wrong: if you wrote this yourself, you can appeal and a person will review it."
+      },
+      {
+        "id": "ai_09",
+        "truth": "ai",
+        "plain": null,
+        "status": 200,
+        "content_id": "cfcb2407176b4ee6b9c347c107cf0f51",
+        "guess": "ai",
+        "confidence": 0.9064,
+        "model_score": 0.9338,
+        "style_score": 0.8653,
+        "label": "We think this was most likely written with an AI tool. Two separate checks both pointed that way, but they can be wrong: if you wrote this yourself, you can appeal and a person will review it."
+      },
+      {
+        "id": "ai_10",
+        "truth": "ai",
+        "plain": null,
+        "status": 200,
+        "content_id": "0b4a4d39152c474188d650812d7671cd",
+        "guess": "ai",
+        "confidence": 0.7953,
+        "model_score": 0.8419,
+        "style_score": 0.7255,
+        "label": "We think this was most likely written with an AI tool. Two separate checks both pointed that way, but they can be wrong: if you wrote this yourself, you can appeal and a person will review it."
+      }
+    ]
+  }
+]
