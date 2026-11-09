@@ -54,25 +54,43 @@ DETECTOR_MAX_TOKENS = 400
 # down BEFORE you code it, and to put the numbers in your README. Whatever you
 # decide, it goes here.
 
-WEIGHT_MODEL_SIGNAL = 0.5
-WEIGHT_STYLE_SIGNAL = 0.5
+# My rule (scoring.py::combine_signals), written down before coding it:
+#
+#   1. Weighted mean: 0.6 * model + 0.4 * style. The model signal gets more
+#      weight because it reads the words; the style signal only sees shape and
+#      is the cheaper one to fool.
+#   2. Disagreement shrink: if the two signals are more than
+#      DISAGREEMENT_GAP apart, the mean is pulled toward 0.5 (unsure) in
+#      proportion to how far past the gap they are. At a full 1.0 split the
+#      result is exactly 0.5. Two methods disagreeing IS uncertainty, and I'd
+#      rather say "unsure" than accuse on one signal alone.
+
+WEIGHT_MODEL_SIGNAL = 0.6
+WEIGHT_STYLE_SIGNAL = 0.4
+DISAGREEMENT_GAP = 0.3
 
 
 # ─── Thresholds (Milestone 5) ────────────────────────────────────────────────
 # Where one label becomes another. Scores run 0.0 (confidently human) to 1.0
 # (confidently AI).
 #
-#   score < HUMAN_THRESHOLD          -> high-confidence human
-#   between the two                  -> unsure
-#   score > AI_THRESHOLD             -> high-confidence AI
+#   score <  HUMAN_THRESHOLD                 -> high-confidence human
+#   HUMAN_THRESHOLD <= score <= AI_THRESHOLD -> unsure
+#   score >  AI_THRESHOLD                    -> high-confidence AI
+#
+# Both boundaries fall into "unsure" on purpose: a score sitting exactly on a
+# line is the least certain score there is.
 #
 # ⚠️ This is where your false-positive decision from Milestone 1 actually gets
 # made. Widening the unsure band means fewer wrong accusations and more AI text
 # getting through. There is no setting that avoids the trade — only settings
 # that decide who pays for it.
 
+# Conservative on purpose: an AI label needs a combined score above 0.75,
+# well clear of a coin flip, and the unsure band is 0.40 wide. Missing some AI
+# text costs the site a little; accusing a real writer costs that person a lot.
 HUMAN_THRESHOLD = 0.35
-AI_THRESHOLD = 0.65
+AI_THRESHOLD = 0.75
 
 # ⚠️ One thing that catches people out in Milestone 5. A weighted average can
 # only land between its two inputs — so while `style_signal` is still the stub
@@ -83,6 +101,18 @@ AI_THRESHOLD = 0.65
 # If a label you can't reach is the problem, the fix is upstream of the
 # thresholds: a style signal that actually varies. `scoring.label_ranges()`
 # prints the bands; the reachable range is a different question.
+
+
+# ─── Input limits (POST /submit and /appeal) ────────────────────────────────
+# Over MAX_TEXT_CHARS is refused with 413 rather than silently truncated; the
+# detector reads only the first DETECTOR_MAX_TOKENS anyway, so a 1 MB body is
+# all cost and no signal. Under MIN_TEXT_WORDS there's too little text for
+# either signal to mean anything, so it's refused with 422 instead of labelled.
+
+MAX_TEXT_CHARS = 20_000
+MIN_TEXT_WORDS = 20
+MAX_CREATOR_ID_CHARS = 128
+MAX_APPEAL_REASON_CHARS = 5_000
 
 
 # ─── Rate limiting (UNIT 8) ──────────────────────────────────────────────────
