@@ -1,8 +1,7 @@
 """
 Turning two numbers into one, and one number into something a person can read.
-← YOU BUILD THIS IN MILESTONES 4 AND 5
 
-Two functions live here, and both are stubs.
+Two functions live here.
 
 `combine_signals` is where your false-positive decision from Milestone 1
 actually gets made. Everything above it — the labels, the appeal path — is
@@ -16,47 +15,56 @@ function holding your combining rule. The grader checks your code against what
 you claim, so that line should read `scoring.py::combine_signals`.
 """
 
+import math
+
 import config
+
+
+def _unit_interval(name: str, value) -> float:
+    """A signal score must be a real number in [0, 1]; anything else is a bug upstream."""
+    if isinstance(value, bool) or not isinstance(value, (int, float)) or math.isnan(value):
+        raise ValueError(f"{name} must be a number, got {value!r}")
+    if not 0.0 <= value <= 1.0:
+        raise ValueError(f"{name} must be between 0 and 1, got {value}")
+    return float(value)
 
 
 def combine_signals(model_score: float, style_score: float) -> float:
     """
-    Combine two 0–1 signals into one 0–1 score. ← TODO (Milestone 4)
+    Combine two 0–1 signals into one 0–1 score. Higher means more likely AI.
 
-    Both inputs point the same way: higher means more likely AI. Your output
-    should too.
+    The rule, with every number in config.py:
 
-    Args:
-        model_score: from `detector.model_signal` — how predictable the text is.
-        style_score: from `stylometry.style_signal` — the shape of the text.
+      1. Weighted mean: WEIGHT_MODEL_SIGNAL (0.6) * model +
+         WEIGHT_STYLE_SIGNAL (0.4) * style. The model signal counts for more
+         because it reads the words; the style signal only sees the shape and
+         is the cheaper one to fool.
 
-    Returns:
-        A float from 0.0 (confidently human) to 1.0 (confidently AI).
+      2. Disagreement shrink: when the two signals are more than
+         DISAGREEMENT_GAP (0.3) apart, the mean is pulled toward 0.5 by the
+         fraction of the remaining distance they've split by:
 
-    ⚠️ **Write the rule down before you code it, and put the numbers in your
-    README.** A weighted average is the obvious choice and it is not the only
-    one. Things worth thinking about:
+             keep = 1 - (|model - style| - GAP) / (1 - GAP)
+             score = 0.5 + (mean - 0.5) * keep
 
-      - **What happens when they disagree?** One signal at 0.9 and the other at
-        0.1 averages to 0.5 — "unsure". Is that what you want? It might be
-        exactly right: two methods disagreeing IS uncertainty. Or you might
-        decide one signal is more trustworthy when they split.
+         A full split (one at 0.0, the other at 1.0) lands exactly on 0.5.
+         Two methods disagreeing IS uncertainty, so a single loud signal can't
+         produce a high-confidence label on its own.
 
-      - **Which way do you want to be wrong?** Weighting toward the signal that
-        reads more human means fewer false accusations and more AI text
-        getting through. There's no weighting that avoids the trade.
-
-      - Milestone 4 asks you to find a case where your two signals split and
-        write it down. That case is what this rule exists to handle.
-
-    The weights in config.py are placeholders. Change them, or ignore them and
-    write a different rule.
+    Deterministic: the same two inputs always give the same output.
     """
-    # TODO: replace this
-    return (
-        config.WEIGHT_MODEL_SIGNAL * model_score
-        + config.WEIGHT_STYLE_SIGNAL * style_score
-    )
+    model = _unit_interval("model_score", model_score)
+    style = _unit_interval("style_score", style_score)
+
+    w_model, w_style = config.WEIGHT_MODEL_SIGNAL, config.WEIGHT_STYLE_SIGNAL
+    score = (w_model * model + w_style * style) / (w_model + w_style)
+
+    gap = abs(model - style)
+    if gap > config.DISAGREEMENT_GAP:
+        keep = 1.0 - (gap - config.DISAGREEMENT_GAP) / (1.0 - config.DISAGREEMENT_GAP)
+        score = 0.5 + (score - 0.5) * keep
+
+    return round(min(max(score, 0.0), 1.0), 4)
 
 
 def score_to_label(score: float) -> tuple[str, str]:

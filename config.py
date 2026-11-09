@@ -70,6 +70,30 @@ WEIGHT_STYLE_SIGNAL = 0.4
 DISAGREEMENT_GAP = 0.3
 
 
+# ─── The style signal (stylometry.py) ───────────────────────────────────────
+# Each measure is mapped onto 0-1 AI-likeness linearly between
+# (ai_end, human_end), clamped. The ends were read off the calibration split
+# only (eval_data/calibration_*.json, `python eval_data/calibrate.py`), never
+# off the evaluation set. Calibration means, human vs AI:
+#
+#   sentence-length CV      human 0.58   AI 0.25   -> low spread = AI
+#   MATTR (window 50)       human 0.78   AI 0.87   -> HIGH variety = AI
+#   expressive punct/word   human 0.075  AI 0.000  -> no punctuation = AI
+#
+# MATTR came out the opposite way to what I assumed going in: generated prose
+# avoids repeating words inside a 50-word window, while human narrative
+# repeats pronouns and names. So its scale runs high = AI.
+
+STYLE_SPREAD_RANGE = (0.25, 0.60)   # (ai_end, human_end)
+STYLE_TTR_RANGE = (0.87, 0.75)      # (ai_end, human_end) — flipped, see above
+STYLE_PUNCT_RANGE = (0.00, 0.06)    # (ai_end, human_end)
+STYLE_WEIGHTS = {
+    "sentence_length_spread": 1.0,
+    "type_token_ratio": 1.0,
+    "punctuation_density": 1.0,
+}
+
+
 # ─── Thresholds (Milestone 5) ────────────────────────────────────────────────
 # Where one label becomes another. Scores run 0.0 (confidently human) to 1.0
 # (confidently AI).
