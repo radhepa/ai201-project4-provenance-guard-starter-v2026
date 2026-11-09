@@ -73,7 +73,7 @@ def log_decision(
     return _append(entry)
 
 
-def log_appeal(content_id: str, creator_id: str, reasoning: str) -> dict:
+def log_appeal(content_id: str, creator_id: str, reasoning: str, **extra) -> dict:
     """
     Record an appeal beside the original decision.
 
@@ -81,6 +81,9 @@ def log_appeal(content_id: str, creator_id: str, reasoning: str) -> dict:
     decision stays exactly where it was and the appeal sits after it — which is
     the whole point of an audit log. Someone reading it later can see what was
     decided, that it was challenged, and in what order.
+
+    Anything extra (the original guess, both signal scores, the combined score
+    and label) is written too, so one appeal line reads on its own.
     """
     return _append({
         "timestamp": _now(),
@@ -89,6 +92,7 @@ def log_appeal(content_id: str, creator_id: str, reasoning: str) -> dict:
         "event": "appeal",
         "status": "under_review",
         "reasoning": reasoning,
+        **extra,
     })
 
 

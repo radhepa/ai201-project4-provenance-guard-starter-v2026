@@ -67,38 +67,48 @@ def combine_signals(model_score: float, style_score: float) -> float:
     return round(min(max(score, 0.0), 1.0), 4)
 
 
+# The exact text a reader sees. Written for someone who has never heard the
+# word "threshold". Kept here, beside the function, so README and code can't
+# drift apart: the README quotes these strings.
+LABEL_HUMAN = (
+    "We think a person most likely wrote this. Our checks found the patterns "
+    "we usually see in human writing."
+)
+LABEL_UNSURE = (
+    "We can't tell whether a person or an AI tool wrote this. A lot of "
+    "writing that people do entirely on their own lands here, so please don't "
+    "read this as an accusation."
+)
+LABEL_AI = (
+    "We think this was most likely written with an AI tool. Two separate "
+    "checks both pointed that way, but they can be wrong: if you wrote this "
+    "yourself, you can appeal and a person will review it."
+)
+
+
 def score_to_label(score: float) -> tuple[str, str]:
     """
-    Turn a score into a guess and the text a reader actually sees.
-    ← TODO (Milestone 5)
+    Turn a combined score into (guess, label_text).
 
-    Returns:
-        (guess, label_text) — where `guess` is a short machine-readable string
-        like "ai" / "human" / "unsure", and `label_text` is the full sentence
-        shown to a person.
+        score <  HUMAN_THRESHOLD (0.35)          -> ("human",  LABEL_HUMAN)
+        HUMAN_THRESHOLD <= score <= AI_THRESHOLD -> ("unsure", LABEL_UNSURE)
+        score >  AI_THRESHOLD (0.75)             -> ("ai",     LABEL_AI)
 
-    ⚠️ Write the label text for someone who has never heard the word
-    "threshold".
+    Every score in [0, 1] gets exactly one label: the three ranges meet at the
+    thresholds with no gap and no overlap, and both boundary values belong to
+    "unsure". A score outside [0, 1] is a bug upstream and raises ValueError.
 
-        ✗ "human, 0.81 confidence"
-        ✓ "We think this was probably written by a person."
-
-    All three labels have to be **reachable**. If no score can produce one of
-    them, your ranges have a gap — and Milestone 5 asks you to submit text that
-    produces each one, which is how you'd find out.
-
-    The hardest one to write is "unsure". It has to admit uncertainty without
-    sounding like an accusation, because the person reading it may well have
-    written every word themselves. Your breakout asks your group what they'd
-    think if they got it on their own work. That question is the whole
-    milestone.
+    The AI label's claim that "two separate checks both pointed that way" is
+    true by construction: with the 0.6/0.4 weights and the disagreement
+    shrink, a combined score above 0.75 needs both signals above 0.5
+    (tests/test_scoring.py checks this over a grid).
     """
-    # TODO: replace this — thresholds are in config.py
-    if score >= config.AI_THRESHOLD:
-        return "ai", "PLACEHOLDER — write the high-confidence AI label."
-    if score <= config.HUMAN_THRESHOLD:
-        return "human", "PLACEHOLDER — write the high-confidence human label."
-    return "unsure", "PLACEHOLDER — write the unsure label."
+    score = _unit_interval("score", score)
+    if score > config.AI_THRESHOLD:
+        return "ai", LABEL_AI
+    if score < config.HUMAN_THRESHOLD:
+        return "human", LABEL_HUMAN
+    return "unsure", LABEL_UNSURE
 
 
 def label_ranges() -> list[tuple[str, str]]:
@@ -107,7 +117,12 @@ def label_ranges() -> list[tuple[str, str]]:
     label text — given to you so the numbers can't drift apart from config.py.
     """
     return [
-        ("high-confidence human", f"0.00 – {config.HUMAN_THRESHOLD:.2f}"),
-        ("unsure", f"{config.HUMAN_THRESHOLD:.2f} – {config.AI_THRESHOLD:.2f}"),
-        ("high-confidence AI", f"{config.AI_THRESHOLD:.2f} – 1.00"),
+        ("high-confidence human", f"0.00 <= score < {config.HUMAN_THRESHOLD:.2f}"),
+        ("unsure", f"{config.HUMAN_THRESHOLD:.2f} <= score <= {config.AI_THRESHOLD:.2f}"),
+        ("high-confidence AI", f"{config.AI_THRESHOLD:.2f} < score <= 1.00"),
     ]
+
+
+if __name__ == "__main__":
+    for name, span in label_ranges():
+        print(f"{name:22} {span}")

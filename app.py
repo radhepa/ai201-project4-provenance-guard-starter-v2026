@@ -19,7 +19,7 @@ Routes:
 
     POST /ping        the worked example. Already works. Don't edit it
     POST /submit      score a piece of text and label it
-    POST /appeal      ← YOU BUILD THIS (Milestone 5)
+    POST /appeal      a writer disputes a decision; moves it to under_review
     GET  /log         the audit log. Already works
     GET  /health      is the service up, and is the model loaded
 """
@@ -303,31 +303,72 @@ def submit():
 @app.post("/appeal")
 def appeal():
     """
-    A writer says you got it wrong. ← TODO — Milestone 5
+    A writer says we got it wrong.
 
-    Expects JSON:
-        {"content_id": "...", "reasoning": "..."}
+    Expects JSON:  {"content_id": "...", "reasoning": "..."}
+    ("reason" is accepted as another name for "reasoning".)
 
-    Should:
-      1. Check the content_id actually exists — `audit.entries_for(id)` tells
-         you. A typo here fails silently and looks like a broken endpoint,
-         which is the single most common way this milestone eats an hour.
-      2. Record the appeal with `audit.log_appeal(...)`, which moves the item
-         to `under_review`.
-      3. Confirm to the writer. No automatic re-checking needed.
+    Returns 200 with the content_id, status "under_review", a confirmation
+    message and the original decision. The appeal is appended to the audit
+    log beside the original decision, with its reason, the original guess,
+    both signal scores, the combined score and the label.
 
-    This is the smallest endpoint in the project and the one that matters most
-    to the person on the other end. It's the only thing standing between a
-    wrong accusation and nothing at all.
+    Repeat-appeal policy: one appeal per content_id. Once an item is
+    under_review, another appeal gets 409 and is logged as a rejection
+    (reason "already_under_review") — refused, but never silently dropped.
+
+    Refuses with JSON: 415 not JSON, 400 malformed/missing/blank/wrong-type
+    fields, 413 reason too long, 404 unknown content_id, 409 repeat appeal.
     """
-    payload = request.get_json(silent=True) or {}
+    payload = None
+    try:
+        payload = _json_object()
+        content_id = _required_string(payload, "content_id", 64)
+        if "reasoning" not in payload and "reason" in payload:
+            payload = {**payload, "reasoning": payload["reason"]}
+        reasoning = _required_string(payload, "reasoning", config.MAX_APPEAL_REASON_CHARS)
 
-    # TODO: delete this and build the route.
+        history = audit.entries_for(content_id)
+        decision = next((e for e in history if "event" not in e), None)
+        if decision is None:
+            raise BadRequest(404, "unknown_content_id",
+                             "We have no decision with that content_id. Check it "
+                             "matches the one /submit returned.",
+                             content_id=content_id)
+        payload = {**payload, "creator_id": decision["creator_id"]}
+        # shortcut: check-then-append isn't atomic across threads; two appeals
+        # racing within milliseconds could both land. Fine for one laptop.
+        if any(e.get("event") == "appeal" for e in history):
+            raise BadRequest(409, "already_under_review",
+                             "This item has already been appealed and is waiting "
+                             "for a person to review it.",
+                             content_id=content_id, current_status="under_review")
+    except BadRequest as exc:
+        return _refuse(exc, payload)
+
+    entry = audit.log_appeal(
+        content_id=content_id,
+        creator_id=decision["creator_id"],
+        reasoning=reasoning,
+        guess=decision.get("guess"),
+        model_score=decision.get("model_score"),
+        style_score=decision.get("style_score"),
+        combined_score=decision.get("combined_score"),
+        label=decision.get("label"),
+    )
     return jsonify({
-        "error": "not_implemented",
-        "message": "POST /appeal isn't built yet — see the TODO in app.py.",
-        "you_sent": payload,
-    }), 501
+        "content_id": content_id,
+        "status": "under_review",
+        "message": "Thanks. Your appeal is recorded and a person will review "
+                   "this decision. The automatic label stays on hold until then.",
+        "appealed_at": entry["timestamp"],
+        "original_decision": {
+            "guess": decision.get("guess"),
+            "confidence": decision.get("combined_score"),
+            "label": decision.get("label"),
+            "decided_at": decision.get("timestamp"),
+        },
+    })
 
 
 # ── Already works ─────────────────────────────────────────────────────────────
