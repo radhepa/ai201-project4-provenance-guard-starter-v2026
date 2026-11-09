@@ -27,3 +27,6 @@ gunicorn>=21.2,<24.0
 # wheel from satisfying this file. Anything before 2026.10.19 still trusts the
 # revoked emSign intermediates.
 certifi>=2026.10.19
+
+# The project's own test suite: python -m pytest tests
+pytest>=8.0,<10.0
