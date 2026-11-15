@@ -1165,6 +1165,20 @@ decimals.
   keyed on a self-asserted `creator_id`. The capstone measured the service; it
   didn't change what it decides.
 
+**All five are met, so here's the target I'd tighten:** criterion 4's CPU
+budget, from 3000 ms to **1000 ms** of mean warm CPU per scored request. The
+after runs measured 614–656 ms. At 3000 ms, a revert to torch's default 8
+threads could still pass: before-run trial 1 did, at 2963 ms. At 1000 ms that
+regression fails loudly, and there's still about 50% headroom over today. The
+reasoning is written under the original criteria in
+[`capstone/criteria.md`](capstone/criteria.md#revisions-written-after-both-runs-the-originals-above-are-unchanged).
+
+**The one thing I'd do first:** load gpt2 at start-up (`detector.warm_up()`
+before `app.run`). Right now the first writer after every restart waits
+13–15 s. That's the slowest moment anyone has with this service, and it's
+about two lines of code. It isn't a criterion miss, but it's what a real
+writer would notice before any of the rest.
+
 **How I Used AI**
 
 I used Claude (Anthropic's Claude Opus 5.5, in Claude Code) as the builder
