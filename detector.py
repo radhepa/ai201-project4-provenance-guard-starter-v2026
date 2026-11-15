@@ -60,7 +60,7 @@ def _load():
         return _model, _tokenizer
 
     try:
-        import torch  # noqa: F401
+        import torch
         from transformers import AutoModelForCausalLM, AutoTokenizer
     except ImportError as exc:
         raise DetectorUnavailable(
@@ -68,6 +68,7 @@ def _load():
             f"Run: pip install -r requirements.txt"
         ) from exc
 
+    torch.set_num_threads(config.DETECTOR_THREADS)
     try:
         _tokenizer = AutoTokenizer.from_pretrained(config.DETECTOR_MODEL)
         _model = AutoModelForCausalLM.from_pretrained(config.DETECTOR_MODEL)

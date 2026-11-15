@@ -46,6 +46,13 @@ DETECTOR_MODEL = os.getenv("AI201_DETECTOR_MODEL", "gpt2")
 # 300 words, which is enough for the signal to mean something.
 DETECTOR_MAX_TOKENS = 400
 
+# Capstone improvement: CPU threads torch may use per gpt2 pass. torch's
+# default here was 8, and on a ~130-token input most of that is threads
+# spinning: 2.4 CPU-s for 0.32 s of wall time. One thread measured 0.62 CPU-s
+# for 0.63 s wall (README, Capstone -> The Improvement). AI201_TORCH_THREADS
+# overrides it.
+DETECTOR_THREADS = int(os.getenv("AI201_TORCH_THREADS", "1"))
+
 
 # ─── Scoring (Milestone 4) ───────────────────────────────────────────────────
 # How much each signal counts toward the combined score.
