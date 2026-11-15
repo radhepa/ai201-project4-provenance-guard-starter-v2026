@@ -24,6 +24,7 @@ Routes:
     GET  /health      is the service up, and is the model loaded
 """
 
+import os
 import time
 import uuid
 
@@ -424,6 +425,18 @@ def main():
     print('    -H "Content-Type: application/json" \\')
     print("    -d '{\"message\": \"hello\"}'")
     print()
+    # With debug on, Werkzeug's reloader runs this twice; only the child
+    # (WERKZEUG_RUN_MAIN=true) serves requests, so only it loads the model.
+    if config.WARM_START and (not config.DEBUG or os.environ.get("WERKZEUG_RUN_MAIN") == "true"):
+        import detector
+        print(f"Loading {config.DETECTOR_MODEL} before taking requests…", flush=True)
+        t0 = time.perf_counter()
+        try:
+            detector.warm_up()
+            print(f"  ready in {time.perf_counter() - t0:.1f}s", flush=True)
+        except detector.DetectorUnavailable as exc:
+            # same as before warm start: /submit reports the detector as unavailable
+            print(f"  couldn't load it, serving anyway: {exc}", flush=True)
     # debug=True hands out an interactive debugger, so it's local-only — see config.py
     app.run(host=config.HOST, port=config.PORT, debug=config.DEBUG)
 

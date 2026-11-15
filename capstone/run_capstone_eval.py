@@ -41,7 +41,9 @@ REFERENCE = ROOT / "results" / "run_2026-11-14_2109_after.json"   # unit 8, afte
 # ── the service ──────────────────────────────────────────────────────────────
 
 def start_service(port, out):
-    env = {**os.environ, "PORT": str(port), "AI201_DEBUG": "0", "PYTHONIOENCODING": "utf-8"}
+    # AI201_WARM_START=0: criterion 4 measures the cold first request, so keep the lazy load here
+    env = {**os.environ, "PORT": str(port), "AI201_DEBUG": "0", "PYTHONIOENCODING": "utf-8",
+           "AI201_WARM_START": "0"}
     proc = subprocess.Popen([sys.executable, "app.py"], cwd=ROOT, env=env,
                             stdout=out, stderr=subprocess.STDOUT)
     import requests

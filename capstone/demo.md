@@ -6,9 +6,8 @@ About 3 minutes, four beats. Keep `capstone/criteria.md` and
 ## Before the session (5 minutes)
 
 1. Start it: `python app.py` (serves `http://127.0.0.1:5000`).
-2. **Send one throwaway submission before you present.** The first request
-   after a start loads gpt2, which took 18.4 s in rehearsal. Don't let that
-   happen on stage.
+2. Wait for `ready in …s` (about 15 s). gpt2 loads at start-up now, so the
+   first submission is fast: 0.48 s in rehearsal, against 18.4 s before.
 3. In a second terminal: `tail -f logs/requests.jsonl`, to show the log
    filling live.
 4. Have the submit command ready (Git Bash; in PowerShell use `curl.exe` on
@@ -64,8 +63,9 @@ submitted text may appear in the log. The log must never hold the writing.
 > 30 test decisions are identical to before. A hundred submissions a day went
 > from 324 to 76 CPU-seconds. The cost: warm latency roughly doubled, to
 > 0.9–1.1 s. That's still under half the budget, but a writer waits longer.
-> What's still broken: the first request after a restart takes 13–18 s while
-> the model loads. Text in Japanese or other non-Latin scripts is refused as
+> Since then I've done the one thing I said I'd do first: the model loads at
+> start-up, so the first writer waits half a second instead of 18. What's
+> still broken: text in Japanese or other non-Latin scripts is refused as
 > 'too short', because the word counter only counts ASCII words. And one
 > maximum-length input took 2.2 s, over my 2-second budget, even though p95
 > passes."
@@ -78,7 +78,7 @@ submitted text may appear in the log. The log must never hold the writing.
 
 | They try | What happens |
 |---|---|
-| First submission | 15–20 s wait while gpt2 loads; looks hung |
+| Starting it | about 15 s before it listens, while gpt2 loads; wait for `ready in` |
 | Empty text | 400 `empty_field` |
 | No JSON header | 415 `unsupported_media_type` |
 | A one-line question | 422 `text_too_short` (under 20 words) |

@@ -272,6 +272,12 @@ from the capstone:
 
 - `AI201_TORCH_THREADS` (default `1`): the CPU threads gpt2 may use per request.
 - `AI201_RATE_LIMITS=0`: turns the rate limiter off. Only the test suite does this.
+- `AI201_WARM_START` (default `1`): loads gpt2 at start-up, so the server
+  takes about 15 s to start listening but the first submission is fast
+  (about 0.5 s instead of 13–18 s). `0` loads it on the first submission
+  instead, which is what `capstone/run_capstone_eval.py` uses.
+
+Wait for `ready in …s` in the start-up output before sending anything.
 
 **Logs it writes:**
 

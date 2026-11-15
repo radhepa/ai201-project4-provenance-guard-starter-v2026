@@ -53,6 +53,13 @@ DETECTOR_MAX_TOKENS = 400
 # overrides it.
 DETECTOR_THREADS = int(os.getenv("AI201_TORCH_THREADS", "1"))
 
+# Load gpt2 when the service starts, not on the first submission. Without it
+# the first writer after every restart waited 13-18 s (README, Capstone ->
+# What's Still Broken). AI201_WARM_START=0 restores the old lazy load, which
+# the capstone harness uses so its cold-start criterion still has a cold
+# request to measure.
+WARM_START = os.getenv("AI201_WARM_START", "1") == "1"
+
 
 # ─── Scoring (Milestone 4) ───────────────────────────────────────────────────
 # How much each signal counts toward the combined score.

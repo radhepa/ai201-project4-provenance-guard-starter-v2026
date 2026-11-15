@@ -143,8 +143,13 @@ def count_tokens(text: str) -> int:
 
 
 def warm_up() -> str:
-    """Load the model without scoring anything. Run this before class."""
+    """Load the model and run one throwaway pass. Run this before class.
+
+    The pass matters: the first forward call pays a one-off setup cost
+    (measured 2.2 s against ~0.5 s after), so loading alone isn't enough.
+    """
     _load()
+    perplexity("The quick brown fox jumps over the lazy dog near the river bank.")
     return f"{config.DETECTOR_MODEL} loaded and ready."
 
 

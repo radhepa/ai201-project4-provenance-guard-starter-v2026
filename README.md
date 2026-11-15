@@ -1179,6 +1179,13 @@ before `app.run`). Right now the first writer after every restart waits
 about two lines of code. It isn't a criterion miss, but it's what a real
 writer would notice before any of the rest.
 
+*Update (unit 10, after the capstone was submitted): done.* `python app.py`
+now loads gpt2 and runs one throwaway pass before it takes requests
+(`config.WARM_START`, `AI201_WARM_START=0` to turn it off). Start-up takes
+about 15 s, and the first submission measured 0.48 s instead of 18.4 s. The
+capstone harness turns it off, so criterion 4 still has a cold request to
+measure and the runs above stay reproducible.
+
 **How I Used AI**
 
 I used Claude (Anthropic's Claude Opus 5.5, in Claude Code) as the builder
