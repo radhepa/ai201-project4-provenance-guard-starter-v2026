@@ -114,3 +114,20 @@ before, on every trial. Also `python -m pytest tests` passes.
 **Why this target:** An operational layer that changes a decision is a bug,
 whatever it measures. If logging shifted even one label, every result from
 units 7 and 8 would stop describing the service that's actually running.
+
+---
+
+## Revisions (written after both runs; the originals above are unchanged)
+
+No criterion or target was changed between the before run and the after run.
+Criterion 4 missed on the before run and was met on the after run against
+the same numbers it was written with.
+
+**Proposed for the next round: tighten criterion 4's CPU target from
+3000 ms to 1000 ms of mean warm CPU per scored request.** The after runs
+measured 614, 614 and 656 ms. At 3000 ms the target is loose enough that a
+revert to torch's default 8 threads could pass it silently: before-run trial
+1 came in at 2963 ms and passed this exact check. At 1000 ms there's about
+50% headroom over today's numbers, and the regression this capstone fixed
+would fail loudly. Latency (warm p95 ≤ 2000 ms) stays where it is, because
+the after run already spends half of it.
