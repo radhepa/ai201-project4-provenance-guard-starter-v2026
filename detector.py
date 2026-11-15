@@ -135,6 +135,12 @@ def model_signal(text: str) -> float:
     return round(min(max(score, 0.0), 1.0), 4)
 
 
+def count_tokens(text: str) -> int:
+    """How many tokens perplexity() actually reads (it truncates at DETECTOR_MAX_TOKENS)."""
+    _, tokenizer = _load()
+    return min(len(tokenizer(text)["input_ids"]), config.DETECTOR_MAX_TOKENS)
+
+
 def warm_up() -> str:
     """Load the model without scoring anything. Run this before class."""
     _load()

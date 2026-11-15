@@ -24,6 +24,7 @@ Routes:
     GET  /health      is the service up, and is the model loaded
 """
 
+import time
 import uuid
 
 from flask import Flask, jsonify, request
@@ -117,6 +118,15 @@ if config.RATE_LIMITING_ENABLED:
             "message": "Too many submissions. Try again shortly.",
             "limit": str(exc.description),
         }), 429
+
+
+# ── Request log — capstone ────────────────────────────────────────────────────
+# One line per /submit and /appeal request in logs/requests.jsonl (metrics.py).
+
+import metrics  # noqa: E402
+
+app.before_request(metrics.start)
+app.after_request(metrics.finish)
 
 
 # ── The worked example. Already works. Don't edit. ────────────────────────────
@@ -258,6 +268,8 @@ def submit():
                              f"there isn't enough text to judge.",
                              min_words=config.MIN_TEXT_WORDS)
 
+        cold_start = detector._model is None  # this request pays for loading gpt2
+        t_model = time.perf_counter()
         try:
             model_score = detector.model_signal(text)
         except detector.DetectorUnavailable:
@@ -267,9 +279,19 @@ def submit():
         except ValueError as exc:  # too few tokens for the model to score
             raise BadRequest(422, "text_too_short", str(exc))
 
+        t_style = time.perf_counter()
         style_score = round(stylometry.style_signal(text), 4)
+        t_done = time.perf_counter()
         combined = round(scoring.combine_signals(model_score, style_score), 4)
         guess, label = scoring.score_to_label(combined)
+        metrics.note(
+            words=len(stylometry.words(text)),
+            # None when signal one is stubbed out (route tests): no tokenizer loaded
+            tokens_scored=detector.count_tokens(text) if detector._tokenizer is not None else None,
+            model_ms=round((t_style - t_model) * 1000, 1),
+            style_ms=round((t_done - t_style) * 1000, 1),
+            cold_start=cold_start,
+        )
     except BadRequest as exc:
         return _refuse(exc, payload)
     except HTTPException:

@@ -41,6 +41,7 @@ def log_path(tmp_path, monkeypatch):
     path = tmp_path / "audit.jsonl"
     monkeypatch.setattr(config, "LOG_DIR", tmp_path)
     monkeypatch.setattr(config, "AUDIT_LOG", path)
+    monkeypatch.setattr(config, "REQUEST_LOG", tmp_path / "requests.jsonl")
     return path
 
 
