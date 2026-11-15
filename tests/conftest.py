@@ -3,8 +3,13 @@ Shared fixtures. Every test writes to its own temporary audit log, so the
 committed logs/audit.jsonl is never touched by the test suite.
 """
 
+import os
 import sys
 from pathlib import Path
+
+# Route tests submit many times from one creator in a burst; the limiter has
+# its own evidence (run_attacks.py --flood). Must be set before app is imported.
+os.environ.setdefault("AI201_RATE_LIMITS", "0")
 
 import pytest
 

@@ -108,6 +108,9 @@ if config.RATE_LIMITING_ENABLED:
             creator_id=payload.get("creator_id", "unknown"),
             reason="rate_limited",
             limit=str(exc.description),
+            route=request.path,
+            http_status=429,
+            limited_key=rate_limit_key(),  # who the limit counted against
         )
         return jsonify({
             "error": "rate_limited",
@@ -217,7 +220,7 @@ def body_too_large(exc):
 # ── POST /submit ──────────────────────────────────────────────────────────────
 
 @app.post("/submit")
-# @limiter.limit(f"{config.RATE_LIMIT_PER_MINUTE}/minute;{config.RATE_LIMIT_PER_DAY}/day")
+@limiter.limit(f"{config.RATE_LIMIT_PER_MINUTE}/minute;{config.RATE_LIMIT_PER_DAY}/day")
 def submit():
     """
     Take a piece of text, decide about it, log the decision, answer.
