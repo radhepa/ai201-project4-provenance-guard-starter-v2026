@@ -110,11 +110,17 @@ STYLE_WEIGHTS = {
 # getting through. There is no setting that avoids the trade — only settings
 # that decide who pays for it.
 
-# Conservative on purpose: an AI label needs a combined score above 0.75,
-# well clear of a coin flip, and the unsure band is 0.40 wide. Missing some AI
+# Conservative on purpose: an AI label needs a combined score above 0.85
+# (0.75 in unit 7), well clear of a coin flip, and the unsure band is 0.50 wide. Missing some AI
 # text costs the site a little; accusing a real writer costs that person a lot.
 HUMAN_THRESHOLD = 0.35
-AI_THRESHOLD = 0.75
+# Unit 8 improvement (the one change): 0.75 -> 0.85. The attack set's
+# false_positive family put two real writers above 0.75 — a non-native
+# speaker (FP03, 0.797) and a student writing to a rubric (FP04, 0.801) —
+# and on everything measured, human text reached 0.80 while known-AI text
+# started at 0.795. 0.85 sits above that overlap. Cost: AI text scoring
+# 0.75-0.85 now gets "unsure" instead of "ai" (2 of my 10 known-AI samples).
+AI_THRESHOLD = 0.85
 
 # ⚠️ One thing that catches people out in Milestone 5. A weighted average can
 # only land between its two inputs — so while `style_signal` is still the stub

@@ -92,7 +92,7 @@ def score_to_label(score: float) -> tuple[str, str]:
 
         score <  HUMAN_THRESHOLD (0.35)          -> ("human",  LABEL_HUMAN)
         HUMAN_THRESHOLD <= score <= AI_THRESHOLD -> ("unsure", LABEL_UNSURE)
-        score >  AI_THRESHOLD (0.75)             -> ("ai",     LABEL_AI)
+        score >  AI_THRESHOLD (0.85)             -> ("ai",     LABEL_AI)
 
     Every score in [0, 1] gets exactly one label: the three ranges meet at the
     thresholds with no gap and no overlap, and both boundary values belong to
@@ -100,7 +100,7 @@ def score_to_label(score: float) -> tuple[str, str]:
 
     The AI label's claim that "two separate checks both pointed that way" is
     true by construction: with the 0.6/0.4 weights and the disagreement
-    shrink, a combined score above 0.75 needs both signals above 0.5
+    shrink, a combined score above 0.85 needs both signals above 0.5
     (tests/test_scoring.py checks this over a grid).
     """
     score = _unit_interval("score", score)
