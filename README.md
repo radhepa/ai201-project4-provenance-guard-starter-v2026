@@ -898,3 +898,294 @@ cost I won't put on them.
 ---
 
 📖 **How to run this project: [RUNNING.md](RUNNING.md)**
+
+---
+
+## Capstone
+
+**What This Extends**
+
+Provenance Guard, the AI-text detector from units 7–8: a Flask service with
+`/submit`, `/appeal` and `/log`, gpt2 perplexity as signal one, stylometry as
+signal two, and an audit log of every decision. Until now I could say what it
+*decided* but not what it *cost*. What's new:
+
+- `metrics.py`: an operations log, `logs/requests.jsonl`, with one structured
+  line for every `/submit` and `/appeal` request, accepted or refused. Each line
+  records wall time, CPU time, a hash of the input (never the text), the
+  outcome, and for scored submissions the time per signal, the tokens gpt2
+  read, and whether the request paid for loading the model.
+- Request ids end to end: `X-Request-Id` in, the same id out, the same id in
+  the log.
+- A measured cost per run, and a run path someone else can repeat
+  (`RUNNING.md`, `requirements-lock.txt`).
+- `capstone/run_capstone_eval.py`: starts the service cold for each trial and
+  computes the verdicts from the log.
+
+**The Shape**
+
+**Shape A: deploy and instrument.** Out of scope, on purpose:
+
+- No change to what the detector decides. Thresholds, weights and signals are
+  as unit 8 left them, and criterion 5 checks that.
+- No hosted deployment. The service needs about 526 MB of gpt2 weights plus
+  torch in memory, and a free tier gives 512 MB with no persistent disk.
+  `RUNNING.md` has the arithmetic.
+- No log shipping, dashboards, alerting or log rotation.
+- No fixes for the unit 8 attack findings (evasion, the ASCII word counter).
+  They're still listed under What's Still Broken in unit 8.
+
+**Running It**
+
+Path B: local, with logs. Python 3.11.15. Install with
+`pip install -r requirements-lock.txt` (43 exact pins, e.g. `torch==2.15.0`,
+`transformers==4.57.6`). gpt2 is cached in
+`~/.cache/huggingface/hub/models--gpt2` (526 MB on disk), and
+`python detector.py` downloads it once. Then one command:
+
+```bash
+python app.py
+```
+
+Logs go to `logs/audit.jsonl` (decisions) and `logs/requests.jsonl`
+(operations). Full steps, environment variables and the check commands:
+[RUNNING.md → Capstone: Path B](RUNNING.md#capstone-path-b-local-with-logs-what-i-actually-run).
+
+**Instrumentation**
+
+Schema of `logs/requests.jsonl`. Every line has:
+
+| Field | Meaning |
+|---|---|
+| `timestamp` | UTC, milliseconds |
+| `request_id` | caller's `X-Request-Id` if it matches `[A-Za-z0-9_-]{1,64}`, else a new uuid; echoed in the response |
+| `route`, `method`, `status` | what was asked and the HTTP answer |
+| `duration_ms` | wall time, from Flask's `before_request` to `after_request` |
+| `cpu_ms` | process CPU over the same span (all threads) |
+| `input_bytes` | request body size |
+| `input_sha256` | first 16 hex digits of the body's SHA-256: identifies the input without storing it |
+| `outcome` | the guess, the appeal status, or the error code |
+
+Accepted `/submit` lines also carry `words`, `tokens_scored`, `model_ms`
+(signal one), `style_ms` (signal two) and `cold_start`.
+
+Ten real entries from the after run, trial 1
+(`results/capstone_run_2026-11-14_2125_after.json`). They show:
+
+- the cold start, a "human" and an "ai" decision
+- five refusals: 400, 415, 413, 422 and 429
+- a valid appeal and an appeal that fails with 404
+
+```json
+{"timestamp": "2026-11-15T02:23:45.380+00:00", "request_id": "cap-a2d4537a-00", "route": "/submit", "method": "POST", "status": 200, "duration_ms": 13679.3, "cpu_ms": 13000.0, "input_bytes": 485, "input_sha256": "f1c9898332f2823e", "outcome": "unsure", "words": 86, "tokens_scored": 112, "model_ms": 13665.4, "style_ms": 0.5, "cold_start": true}
+{"timestamp": "2026-11-15T02:23:48.417+00:00", "request_id": "cap-a2d4537a-05", "route": "/submit", "method": "POST", "status": 200, "duration_ms": 470.2, "cpu_ms": 468.8, "input_bytes": 455, "input_sha256": "bf8c83aa46a96da0", "outcome": "human", "words": 80, "tokens_scored": 102, "model_ms": 467.7, "style_ms": 0.3, "cold_start": false}
+{"timestamp": "2026-11-15T02:23:58.181+00:00", "request_id": "cap-a2d4537a-20", "route": "/submit", "method": "POST", "status": 200, "duration_ms": 542.2, "cpu_ms": 546.9, "input_bytes": 751, "input_sha256": "774dd5d3e925c0a0", "outcome": "ai", "words": 103, "tokens_scored": 123, "model_ms": 539.8, "style_ms": 0.3, "cold_start": false}
+{"timestamp": "2026-11-15T02:24:03.761+00:00", "request_id": "cap-a2d4537a-30", "route": "/submit", "method": "POST", "status": 400, "duration_ms": 1.3, "cpu_ms": 0.0, "input_bytes": 17, "input_sha256": "946fefe1ec51413c", "outcome": "invalid_json"}
+{"timestamp": "2026-11-15T02:24:03.787+00:00", "request_id": "cap-a2d4537a-31", "route": "/submit", "method": "POST", "status": 415, "duration_ms": 1.3, "cpu_ms": 0.0, "input_bytes": 23, "input_sha256": "47b9ddf4305e84fc", "outcome": "unsupported_media_type"}
+{"timestamp": "2026-11-15T02:24:03.894+00:00", "request_id": "cap-a2d4537a-40", "route": "/submit", "method": "POST", "status": 413, "duration_ms": 1.5, "cpu_ms": 0.0, "input_bytes": 20048, "input_sha256": "bb16877d0a01320e", "outcome": "field_too_long"}
+{"timestamp": "2026-11-15T02:24:03.924+00:00", "request_id": "cap-a2d4537a-42", "route": "/submit", "method": "POST", "status": 422, "duration_ms": 1.5, "cpu_ms": 0.0, "input_bytes": 70, "input_sha256": "ddc48fc0be6d9aa0", "outcome": "text_too_short"}
+{"timestamp": "2026-11-15T02:24:04.008+00:00", "request_id": "cap-a2d4537a-52", "route": "/submit", "method": "POST", "status": 429, "duration_ms": 1.0, "cpu_ms": 0.0, "input_bytes": 70, "input_sha256": "ddc48fc0be6d9aa0", "outcome": "rate_limited"}
+{"timestamp": "2026-11-15T02:24:04.050+00:00", "request_id": "cap-a2d4537a-54", "route": "/appeal", "method": "POST", "status": 200, "duration_ms": 15.0, "cpu_ms": 0.0, "input_bytes": 96, "input_sha256": "bf7e6e491270b8ad", "outcome": "under_review"}
+{"timestamp": "2026-11-15T02:24:04.069+00:00", "request_id": "cap-a2d4537a-55", "route": "/appeal", "method": "POST", "status": 404, "duration_ms": 14.9, "cpu_ms": 0.0, "input_bytes": 68, "input_sha256": "a9b8cf870e76c8f3", "outcome": "unknown_content_id"}
+```
+
+Three things in there I didn't know before:
+
+- The 429 and the 422 before it have the same `input_sha256`. The log can show
+  a burst of identical inputs without ever having held the text.
+- An appeal costs 15 ms against about 1 ms for a refusal. `/appeal` re-reads
+  the whole audit log to find the decision, so it gets slower as the log grows.
+- The cold start is one request that takes 13.7 s, all of it inside signal
+  one: `model_ms` 13665 of 13679.
+
+**What It Costs**
+
+There's no API spend: gpt2 runs on this machine (16 logical CPUs, CPU-only
+torch). The cost is compute, measured as process CPU-seconds per scored
+submission.
+
+Method: `capstone/run_capstone_eval.py --cost 10` starts the service, sends
+one throwaway submission so the model is loaded, then sends 10 real ones
+(5 human passages, 5 AI passages, 85–143 tokens each). It reads `cpu_ms` and
+`duration_ms` back from `logs/requests.jsonl`. Full tables:
+[`results/capstone_cost_2026-11-14_2126_after_1thread.md`](results/capstone_cost_2026-11-14_2126_after_1thread.md)
+(the running configuration) and
+[`..._before_8threads.md`](results/capstone_cost_2026-11-14_2125_before_8threads.md).
+
+As it runs now (1 torch thread):
+
+```
+total CPU   = 0.641 + 0.562 + 0.562 + 0.688 + 0.469 + 0.625 + 0.656 + 0.656 + 0.688 + 0.688 = 6.234 CPU-s
+per run     = 6.234 / 10 = 0.623 CPU-s   (wall 0.630 s, 120 tokens)
+100 a day   = 100 x 0.623 = 62.3 CPU-s = 1.04 CPU-min of compute
+            + 1 cold start a day (13.6 CPU-s) = 76.0 CPU-s
+tokens/day  = 100 x 120 = 12030 tokens through gpt2
+API spend   = $0 (gpt2 runs locally; no hosted API is called)
+```
+
+Before the improvement (torch's default of 8 threads), the same 10 inputs
+cost 30.516 CPU-s: 3.052 per run, 305.2 CPU-s a day plus a 19.1 CPU-s cold
+start, so **324.2 CPU-s a day**. One thread does the same work for 76.0 CPU-s,
+**4.3× less**.
+
+At 100 a day either number is small. One core has 86,400 CPU-s a day, and
+this uses 0.09% of one. Two other costs are bigger than the per-request
+compute:
+
+- memory: gpt2 and torch stay resident the whole time the service is up
+- the 13–15 s cold start after every restart
+
+Refused requests (400/413/415/422/429) cost about 1 ms of wall time and
+under the CPU clock's resolution, so a flood of junk is cheap to turn away.
+
+**Run Log and Verdicts**
+
+Criteria are in [`capstone/criteria.md`](capstone/criteria.md), committed
+before anything ran. Each trial starts the service cold and sends the same
+58 requests:
+
+- the 30 evaluation texts
+- 12 malformed bodies
+- a 12-request burst from one creator: 10 × 422, then 2 × 429
+- 2 appeals
+- 2 extra submissions
+
+Before the improvement
+([`results/capstone_run_2026-11-14_2121_before.md`](results/capstone_run_2026-11-14_2121_before.md)):
+
+| Criterion | Target | Run 1 | Run 2 | Run 3 | Verdict |
+|---|---|---|---|---|---|
+| 1. Every request leaves one complete entry | 58/58 matched, 0 incomplete | 58/58 matched, 0 incomplete | 58/58 matched, 0 incomplete | 58/58 matched, 0 incomplete | **MET** |
+| 2. Timings trustworthy | 100% bounded, ≥95% ≤50 ms, stages 100% | 58/58 bounded, 100% ≤50 ms, stages 32/32 | 58/58 bounded, 100% ≤50 ms, stages 32/32 | 58/58 bounded, 100% ≤50 ms, stages 32/32 | **MET** |
+| 3. No writer text in the log | 0 6-grams found | 0 of 3076 found | 0 of 3076 found | 0 of 3076 found | **MET** |
+| 4. Latency and CPU budget | warm p95 ≤2000 ms, CPU ≤3000 ms, cold ≤30 s | p95 408 ms, CPU 2963 ms, cold 12.9 s | p95 369 ms, CPU 3020 ms, cold 14.1 s | p95 429 ms, CPU 3135 ms, cold 14.3 s | **MISSED** |
+| 5. Decisions unchanged | 30/30 identical, same 8 keys | 30/30 identical, keys same | 30/30 identical, keys same | 30/30 identical, keys same | **MET** |
+
+**Diagnosis of the miss (criterion 4).**
+
+- **Stage:** signal one (`detector.py::perplexity`, the gpt2 forward pass).
+- **What the log shows:** across 93 warm submissions, `model_ms` is 290–326
+  ms of a 293–330 ms request. `style_ms` is 0.5 ms, and routing, scoring and
+  logging take the remaining ~3 ms. So the cost lives entirely in signal one.
+- **The mechanism:** the CPU was 2963–3135 ms per request against about
+  300 ms of wall time, roughly 10× more CPU than wall clock. torch's default
+  on this machine is 8 intra-op threads. A ~130-token gpt2 pass is too small
+  to split eight ways usefully, so most of those threads spin waiting on
+  each other.
+- **Confirmation:** I measured perplexity on the same 10 texts directly at
+  different thread counts:
+
+  | torch threads | wall per text | CPU per text | CPU ÷ wall |
+  |---|---|---|---|
+  | 16 | 419 ms | 3944 ms | 9.4 |
+  | 8 (default) | 324 ms | 2405 ms | 7.4 |
+  | 4 | 367 ms | 1311 ms | 3.6 |
+  | 2 | 555 ms | 1083 ms | 1.9 |
+  | 1 | 631 ms | 620 ms | 1.0 |
+
+  Going from 1 thread to 8 buys 0.3 s of latency for 3.9× the CPU.
+- **Why it MISSED and wasn't only "close":** the budget was set to keep 100
+  a day under 5 CPU-minutes, and trial 1 passed only by 37 ms. That's a
+  service sitting on the line, and two of three trials crossed it.
+
+The other four held, and the log shows why:
+
+- **Criterion 1:** the 429s are logged too. `metrics.start` runs before
+  Flask-Limiter's check fires, and the 429 handler's response still passes
+  through `after_request`.
+- **Criterion 2:** the client-minus-server gap was at most a few
+  milliseconds; the per-trial detail in the results file has max and median.
+- **Criterion 5:** the decisions match unit 8 to four decimals.
+
+**The Improvement**
+
+**What changed:** `config.DETECTOR_THREADS = 1` (overridable with
+`AI201_TORCH_THREADS`), applied with `torch.set_num_threads` in
+`detector.py::_load`. That's one setting, chosen from the thread table above.
+One thread is the cheapest per request and still keeps warm p95 under half the
+2 s budget. On a shared machine it also leaves the other cores free for
+concurrent requests, instead of eight threads fighting over them.
+
+**Why:** the diagnosis put all the cost in signal one's thread count, not in
+my code. Nothing else in the request costs more than 1 ms.
+
+After
+([`results/capstone_run_2026-11-14_2125_after.md`](results/capstone_run_2026-11-14_2125_after.md)),
+side by side with before:
+
+| Criterion | Before: Run 1 / 2 / 3 | Before | After: Run 1 / 2 / 3 | After |
+|---|---|---|---|---|
+| 1. One complete entry per request | 58/58, 0 incomplete ×3 | MET | 58/58, 0 incomplete ×3 | **MET** |
+| 2. Timings trustworthy | 58/58 bounded, 100% ≤50 ms, 32/32 ×3 | MET | 58/58 bounded, 100% ≤50 ms, 32/32 ×3 | **MET** |
+| 3. No writer text | 0 of 3076 ×3 | MET | 0 of 3076 ×3 | **MET** |
+| 4. Latency and CPU budget | p95 408 / 369 / 429 ms; CPU 2963 / 3020 / 3135 ms; cold 12.9 / 14.1 / 14.3 s | MISSED | p95 890 / 844 / 1093 ms; CPU 617 / 614 / 656 ms; cold 13.7 / 13.9 / 12.9 s | **MET** |
+| 5. Decisions unchanged | 30/30, keys same ×3 | MET | 30/30, keys same ×3 | **MET** |
+
+**The trade:** CPU per scored submission fell from about 3.0 s to about 0.63 s
+(4.8× less). Warm p95 latency roughly doubled, from about 0.4 s to 0.9–1.1 s.
+A writer now waits about half a second longer, in exchange for a service that
+uses a fifth of the compute. That's still under half the 2 s budget, but it's
+a real cost. On a machine where only one writer is ever waiting, 4 threads
+(367 ms wall, 1311 ms CPU) would be the better setting. The decisions didn't
+move: 30/30 identical, so a single thread gives the same scores to four
+decimals.
+
+**What's Still Broken**
+
+- **CPU time below about 16 ms reads as 0.** `time.process_time` on Windows
+  ticks in 15.625 ms steps, so every refusal logs `cpu_ms: 0.0` (see the ten
+  entries) and the per-run CPU numbers are quantised: 562.5, 656.2. My
+  criteria didn't catch this because none of them checks CPU resolution. The
+  scored-request totals are still right to about ±16 ms, so the cost math
+  holds. Next step: measure per-thread CPU with `time.thread_time` or
+  `psutil`, or log `null` with a note below the clock's resolution instead of
+  a confident 0.0. I stopped because it doesn't change any verdict or the cost
+  conclusion.
+- **`cpu_ms` is process-wide.** I measured with one request at a time.
+  Under concurrent load, two requests' CPU would overlap and each line would
+  over-count. The fix is per-thread timing (as above) or a single worker per
+  process. That isn't a problem at 100 a day, but it would be under a flood.
+- **Cold start is 13–15 s.** Criterion 4 allows 30 s, so it's MET, but the
+  first writer after every restart waits that long, and the log shows all of
+  it is gpt2 loading. Next step: load the model at start-up
+  (`detector.warm_up()` before `app.run`) so no request pays for it. I didn't
+  do it because the capstone allows one improvement, and the CPU miss was the
+  one that failed a criterion.
+- **Memory isn't instrumented.** The log has no RSS, so I can't show the
+  "won't fit a 512 MB host" claim from my own numbers. That claim rests on the
+  526 MB on-disk model size alone. Next step: log the process RSS at start-up
+  and after the first request.
+- **`/appeal` scans the whole audit log** (15 ms now) and gets slower as the
+  log grows. Next step: an index of content ids, or SQLite.
+- **The request log grows forever.** There's no rotation or retention. At 100
+  requests a day that's about 30 KB a day, so not urgent, but `logs/` has no
+  limit.
+- **Everything from unit 8's What's Still Broken still stands**: evasion
+  through the disagreement shrink, ASCII-only word counting, and a rate limit
+  keyed on a self-asserted `creator_id`. The capstone measured the service; it
+  didn't change what it decides.
+
+**How I Used AI**
+
+As in units 7–8, Claude (Anthropic's Claude Opus 5.5, in Claude Code) built
+this. It chose the shape, wrote the criteria, `metrics.py`, the harness, the
+improvement and this write-up. Every number above comes from real runs on my
+machine. It's not my independent work, and I'm saying so.
+
+- **Moment 1, writing criteria before code.** I asked for the capstone end
+  to end on any project. Claude picked Shape A on Provenance Guard because the
+  audit log and local model made cost measurable. It wrote and committed
+  `capstone/criteria.md` (commit `9171dea`) before `metrics.py` existed,
+  including a 3 CPU-second budget derived from "100 a day under 5
+  CPU-minutes". That budget is the one the first run missed. If the criteria
+  had been written after seeing the numbers, the 3135 ms would probably have
+  been called fine.
+- **Moment 2, diagnosing the miss instead of loosening the target.** When
+  criterion 4 missed by 20–135 ms, the easy move was to raise the budget.
+  Claude instead used the log's own fields to locate the cost: `model_ms` was
+  99% of `duration_ms`, while `cpu_ms` was 10× `duration_ms`. It then measured
+  gpt2 directly at 1/2/4/8/16 threads to confirm the mechanism before changing
+  one setting. It also reported the cost of the fix (latency about doubled)
+  rather than only the win. The thing I'd check myself is the choice of 1
+  thread over 4. That's a judgement about whether this service is CPU-bound
+  or latency-bound, and the numbers support either.

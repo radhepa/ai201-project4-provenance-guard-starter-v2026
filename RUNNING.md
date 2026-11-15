@@ -237,6 +237,69 @@ system doesn't fit its host *before* you spend an evening watching it get
 killed is the skill unit 9 is actually testing. Write the arithmetic above in
 your write-up; that's the deliverable.
 
+### Capstone: Path B, local with logs (what I actually run)
+
+This is the run path the capstone was measured on.
+
+**Python:** 3.11.15 (3.11–3.13 supported, not 3.14).
+
+**Dependencies:** `requirements.txt` gives the ranges. `requirements-lock.txt` pins
+the exact 43 packages the measurements were taken with, for example
+`torch==2.15.0`, `transformers==4.57.6`, `flask==3.1.3` and
+`flask-limiter==3.12`.
+
+```bash
+python -m venv .venv
+source .venv/Scripts/activate        # macOS/Linux: source .venv/bin/activate
+pip install -r requirements-lock.txt
+python detector.py                   # downloads the model once
+```
+
+**Model files:** `gpt2` from the Hugging Face hub, cached in
+`~/.cache/huggingface/hub/models--gpt2` (526 MB on disk, measured). The cache
+holds `model.safetensors`, `config.json`, `generation_config.json`,
+`tokenizer.json`, `tokenizer_config.json`, `vocab.json` and `merges.txt`.
+There's no API key and no hosted service.
+
+**Start it (one command):**
+
+```bash
+python app.py
+```
+
+It serves `http://127.0.0.1:5000`. Set `PORT` for another port. Two settings
+from the capstone:
+
+- `AI201_TORCH_THREADS` (default `1`): the CPU threads gpt2 may use per request.
+- `AI201_RATE_LIMITS=0`: turns the rate limiter off. Only the test suite does this.
+
+**Logs it writes:**
+
+| File | What |
+|---|---|
+| `logs/audit.jsonl` | Every decision, appeal and refusal (units 7–8) |
+| `logs/requests.jsonl` | One line per `/submit` or `/appeal` request: timing, CPU, outcome, stage breakdown. It never holds the text (capstone, `metrics.py`) |
+
+**Watch it work:** run `tail -f logs/requests.jsonl` in a second terminal while
+you submit.
+
+**Check it:**
+
+```bash
+python -m pytest tests
+```
+
+```bash
+python capstone/run_capstone_eval.py --label check
+```
+
+```bash
+python capstone/run_capstone_eval.py --cost 10
+```
+
+The second command runs the five capstone criteria, three cold-start trials,
+on port 5001. The third runs the 10-run cost measurement.
+
 ---
 
 ## Where everything lives
