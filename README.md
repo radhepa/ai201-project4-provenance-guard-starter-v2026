@@ -1184,53 +1184,56 @@ writer would notice before any of the rest.
 I used Claude (Anthropic's Claude Opus 5.5, in Claude Code) as the builder
 and myself as the one directing it. Claude wrote the code, the criteria, the
 harness and the first draft of this write-up. I set the scope, made the calls
-that decide what the project is and where it goes, and decided what got
-published. Every number above comes from real runs on my machine. Here's the
-split, as honestly as I can draw it.
+about what the project is and where it goes, and decided what got published.
+Every number above comes from real runs on my machine.
 
-*What I directed:*
+**Moment 1: setting the brief.**
 
-- **The brief and its limits.** I started the capstone right after unit 8
-  and gave Claude the full assignment text. I told it it could choose the
-  project. While it was planning, I added the constraint that mattered: it
-  can be any project, but the capstone has to *expand* one, not start fresh.
-  That's why the work went into Provenance Guard, the service I already had,
-  instead of a new build.
-- **Where the work happened.** I first asked for the capstone in a separate
-  session. When that couldn't start, I chose to do it in the same session as
-  unit 8, so it built directly on that code, its audit log and its eval set
-  rather than re-learning them.
-- **How it used the course site.** For units 8 and 9 I set the rules for
-  CodePath: I signed in myself, and Claude was limited to the assignment page
-  it needed and the submission form, with nothing else browsed or read.
-- **What got merged and published.** When the work was done on its own branch,
-  I asked whether it was supposed to be merged, weighed the answer (graders
-  see `main`; merging also adds this section under the unit 8 write-up), and
-  decided to merge it to `main` and submit.
-- **This section.** The first draft said Claude did everything and stopped
-  there. I sent it back and asked for an in-depth account that also shows
-  where I steered the work.
+- *What I asked:* I gave Claude the full capstone assignment and told it to
+  pick the project ("choose anything"). While it was planning, I added the
+  constraint that mattered: it can be any project, but it has to *expand*
+  one, not start fresh. I first asked for the work in a separate session.
+  When that couldn't start, I chose to keep it in the same session as unit 8.
+- *What I got:* Shape A (deploy and instrument) on Provenance Guard. The
+  service already had an audit log and a local model, which made cost
+  something it could measure rather than estimate. Claude wrote
+  `capstone/criteria.md` and committed it (`9171dea`) before `metrics.py`
+  existed. That included a 3 CPU-second budget, derived from "100 a day
+  under 5 CPU-minutes", and it's the target the first run missed. Because
+  the criteria came first, the 3135 ms couldn't be quietly called fine.
+- *What I changed:* the scope. Without "expand an existing project" this
+  could have become a new build with nothing to compare against. With it,
+  the capstone measures the unit 8 service directly, and criterion 5 can
+  check that instrumenting it changed no decisions.
 
-*What Claude did, and the two moments that mattered:*
+**Moment 2: deciding what ships and how it's credited.**
 
-- **Moment 1, writing criteria before code.** Claude picked Shape A on
-  Provenance Guard because the audit log and the local model made cost
-  measurable. It wrote and committed `capstone/criteria.md` (commit `9171dea`)
-  before `metrics.py` existed. That included a 3 CPU-second budget derived from
-  "100 a day under 5 CPU-minutes", and that budget is the one the first run
-  missed. If the criteria had been written after seeing the numbers, the
-  3135 ms would probably have been called fine.
-- **Moment 2, diagnosing the miss instead of loosening the target.** When
-  criterion 4 missed by 20–135 ms, the easy move was to raise the budget.
-  Claude instead used the log's own fields to locate the cost: `model_ms` was
-  99% of `duration_ms`, while `cpu_ms` was 10× `duration_ms`. It then measured
-  gpt2 directly at 1/2/4/8/16 threads to confirm the mechanism before changing
-  one setting. It also reported what the fix cost (latency about doubled), not
-  only what it won.
+- *What I asked:* when the work was finished on its own branch, I asked
+  whether it was supposed to be merged. Then I told Claude to merge and
+  submit, and to rewrite this section in more depth, showing where I
+  directed it.
+- *What I got:* a straight answer on the trade-off. Graders open `main`, so
+  an unmerged branch hides the capstone, and merging adds it under the unit 8
+  write-up in the same repo. It also offered the alternative: link the
+  branch and leave `main` as unit 8 left it. The first draft of this section
+  said Claude did everything and stopped there.
+- *What I changed:* I chose to merge to `main` and submit, and I sent this
+  section back. The version you're reading separates my direction from
+  Claude's engineering instead of crediting all of it to one or the other.
+  Checking the course's submission rules before submitting also turned up
+  gaps, which Claude then filled: this two-moment format, the target to
+  tighten and the one thing to do first.
 
-*What I didn't do, and what I'd check:* I didn't write the code or the
+**What Claude did that I'd point to:** when criterion 4 missed by 20–135 ms,
+it didn't raise the budget. It used the log's own fields to find the cost
+(`model_ms` was 99% of `duration_ms`, and `cpu_ms` was 10× `duration_ms`).
+It measured gpt2 at 1/2/4/8/16 threads to confirm the mechanism before
+changing one setting, and it reported what the fix cost (latency about
+doubled), not only what it won.
+
+**What I didn't do, and what I'd check:** I didn't write the code or the
 criteria, and I didn't pick the thread count. Claude chose 1 thread over 4.
 That's a judgement about whether this service is CPU-bound or latency-bound,
-and the numbers support either, so it's the decision I'd revisit first. The
-honest summary: the direction and the publishing decisions are mine; the
+and the numbers support either, so it's the decision I'd revisit first. In
+short, the direction and the publishing decisions are mine, and the
 engineering is Claude's.
