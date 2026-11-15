@@ -1167,25 +1167,56 @@ decimals.
 
 **How I Used AI**
 
-As in units 7–8, Claude (Anthropic's Claude Opus 5.5, in Claude Code) built
-this. It chose the shape, wrote the criteria, `metrics.py`, the harness, the
-improvement and this write-up. Every number above comes from real runs on my
-machine. It's not my independent work, and I'm saying so.
+I used Claude (Anthropic's Claude Opus 5.5, in Claude Code) as the builder
+and myself as the one directing it. Claude wrote the code, the criteria, the
+harness and the first draft of this write-up. I set the scope, made the calls
+that decide what the project is and where it goes, and decided what got
+published. Every number above comes from real runs on my machine. Here's the
+split, as honestly as I can draw it.
 
-- **Moment 1, writing criteria before code.** I asked for the capstone end
-  to end on any project. Claude picked Shape A on Provenance Guard because the
-  audit log and local model made cost measurable. It wrote and committed
-  `capstone/criteria.md` (commit `9171dea`) before `metrics.py` existed,
-  including a 3 CPU-second budget derived from "100 a day under 5
-  CPU-minutes". That budget is the one the first run missed. If the criteria
-  had been written after seeing the numbers, the 3135 ms would probably have
-  been called fine.
+*What I directed:*
+
+- **The brief and its limits.** I started the capstone right after unit 8
+  and gave Claude the full assignment text. I told it it could choose the
+  project. While it was planning, I added the constraint that mattered: it
+  can be any project, but the capstone has to *expand* one, not start fresh.
+  That's why the work went into Provenance Guard, the service I already had,
+  instead of a new build.
+- **Where the work happened.** I first asked for the capstone in a separate
+  session. When that couldn't start, I chose to do it in the same session as
+  unit 8, so it built directly on that code, its audit log and its eval set
+  rather than re-learning them.
+- **How it used the course site.** For units 8 and 9 I set the rules for
+  CodePath: I signed in myself, and Claude was limited to the assignment page
+  it needed and the submission form, with nothing else browsed or read.
+- **What got merged and published.** When the work was done on its own branch,
+  I asked whether it was supposed to be merged, weighed the answer (graders
+  see `main`; merging also adds this section under the unit 8 write-up), and
+  decided to merge it to `main` and submit.
+- **This section.** The first draft said Claude did everything and stopped
+  there. I sent it back and asked for an in-depth account that also shows
+  where I steered the work.
+
+*What Claude did, and the two moments that mattered:*
+
+- **Moment 1, writing criteria before code.** Claude picked Shape A on
+  Provenance Guard because the audit log and the local model made cost
+  measurable. It wrote and committed `capstone/criteria.md` (commit `9171dea`)
+  before `metrics.py` existed. That included a 3 CPU-second budget derived from
+  "100 a day under 5 CPU-minutes", and that budget is the one the first run
+  missed. If the criteria had been written after seeing the numbers, the
+  3135 ms would probably have been called fine.
 - **Moment 2, diagnosing the miss instead of loosening the target.** When
   criterion 4 missed by 20–135 ms, the easy move was to raise the budget.
   Claude instead used the log's own fields to locate the cost: `model_ms` was
   99% of `duration_ms`, while `cpu_ms` was 10× `duration_ms`. It then measured
   gpt2 directly at 1/2/4/8/16 threads to confirm the mechanism before changing
-  one setting. It also reported the cost of the fix (latency about doubled)
-  rather than only the win. The thing I'd check myself is the choice of 1
-  thread over 4. That's a judgement about whether this service is CPU-bound
-  or latency-bound, and the numbers support either.
+  one setting. It also reported what the fix cost (latency about doubled), not
+  only what it won.
+
+*What I didn't do, and what I'd check:* I didn't write the code or the
+criteria, and I didn't pick the thread count. Claude chose 1 thread over 4.
+That's a judgement about whether this service is CPU-bound or latency-bound,
+and the numbers support either, so it's the decision I'd revisit first. The
+honest summary: the direction and the publishing decisions are mine; the
+engineering is Claude's.
